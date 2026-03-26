@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Water Memory</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Georgia', serif;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Page system ── */
+    .page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 1.4s ease;
+    }
+    .page.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Typography ── */
+    h1 {
+      color: rgba(255,255,255,0.9);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      margin-bottom: 1.6rem;
+      line-height: 1.5;
+    }
+    h2 {
+      color: rgba(255,255,255,0.88);
+      font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      line-height: 1.8;
+      max-width: 600px;
+      position: relative;
+      z-index: 2;
+    }
+    h2 em { font-style: italic; opacity: 0.85; }
+
+    /* ── Name input ── */
+    .name-wrap { margin-bottom: 2.4rem; }
+    input[type="text"] {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.45);
+      color: white;
+      font-family: Georgia, serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.08em;
+      outline: none;
+      padding: 0.4rem 0;
+      text-align: center;
+      width: 280px;
+    }
+    input[type="text"]::placeholder { color: rgba(255,255,255,0.3); }
+
+    /* ── Water buttons ── */
+    .water-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      justify-content: center;
+      margin-bottom: 2.4rem;
+    }
+    .water-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.75);
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      padding: 0.75rem 2.2rem;
+      transition: all 0.35s ease;
+    }
+    .water-btn:hover  { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.65); color: white; }
+    .water-btn.selected { background: rgba(255,255,255,0.15); border-color: white; color: white; }
+
+    /* ── Nav / action buttons ── */
+    .next-btn, .submit-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.85);
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.22em;
+      margin-top: 2.6rem;
+      padding: 0.8rem 3rem;
+      position: relative;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    .next-btn:hover, .submit-btn:hover { background: rgba(255,255,255,0.1); border-color: white; color: white; }
+    .next-btn:disabled { opacity: 0.3; cursor: default; }
+
+    /* ── Backgrounds ── */
+    #step-1         { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
+    #step-calm      { background: linear-gradient(180deg, #020e1f 0%, #0b2653 55%, #1a4a8a 100%); }
+    #step-stormy    { background: linear-gradient(180deg, #111827 0%, #1e2f4a 50%, #2d3b5e 100%); }
+    #step-wavy      { background: #140828; }
+    #step-breathe   { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
+    #step-choose    { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
+    #step-voice     { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
+    #step-text      { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
+    #step-thankyou  { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
+
+    /* ── Wavy orbs ── */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    .orb-1 { width:480px; height:480px; background:#5b21b6; top:-160px; left:-140px; animation:drift1 10s ease-in-out infinite; }
+    .orb-2 { width:420px; height:420px; background:#1d4ed8; bottom:-120px; right:-100px; animation:drift2 12s ease-in-out infinite; }
+    .orb-3 { width:320px; height:320px; background:#7c3aed; top:50%; left:52%; transform:translate(-50%,-50%); animation:drift3 9s ease-in-out infinite; }
+    @keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(50px,40px) scale(1.08)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-45px,-35px) scale(1.06)} }
+    @keyframes drift3 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,calc(-50% + 28px)) scale(1.04)} }
+
+    /* ── Breathe ── */
+    .breathe-lines { display:flex; flex-direction:column; gap:0.6rem; z-index:2; }
+    .breathe-lines p { color:rgba(255,255,255,0.85); font-size:clamp(1rem,2.2vw,1.35rem); font-weight:300; letter-spacing:0.18em; }
+
+    /* ═══════════════════════════════════════════
+       STEP 4 — CHOOSE FORMAT
+    ═══════════════════════════════════════════ */
+    .choose-options {
+      display: flex;
+      gap: 1.4rem;
+      margin-top: 0.5rem;
+      z-index: 2;
+    }
+    .choose-card {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.75);
+      cursor: pointer;
+      font-family: Georgia, serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 2rem 2.6rem;
+      transition: all 0.35s ease;
+      width: 160px;
+    }
+    .choose-card:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.7);
+      color: white;
+    }
+    .choose-card-icon { font-size: 2rem; line-height: 1; }
+    .choose-card-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════
+       STEP 5a — VOICE
+    ═══════════════════════════════════════════ */
+    #step-voice { justify-content: center; gap: 0; }
+
+    .voice-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.55rem;
+      width: 100%;
+      max-width: 400px;
+      z-index: 2;
+    }
+
+    /* Pulsing ring wrapper */
+    .record-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 0.3rem;
+    }
+    .record-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .record-ring.pulsing  { animation: ringPulse  1s ease-in-out infinite; border-color: rgba(255,90,90,0.6); }
+    .record-ring-2 {
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px solid transparent;
+    }
+    .record-ring-2.pulsing { animation: ringPulse2 1s ease-in-out infinite 0.25s; border-color: rgba(255,90,90,0.3); }
+
+    @keyframes ringPulse  { 0%,100%{transform:scale(1); opacity:.8} 50%{transform:scale(1.5); opacity:.15} }
+    @keyframes ringPulse2 { 0%,100%{transform:scale(1); opacity:.5} 50%{transform:scale(1.65);opacity:0}   }
+
+    .record-btn {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      position: relative;
+      transition: background 0.25s, border-color 0.25s, transform 0.1s;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      z-index: 1;
+    }
+    .record-btn.recording {
+      background: rgba(220,60,60,0.25);
+      border-color: rgba(255,100,100,0.8);
+      transform: scale(0.95);
+    }
+
+    .record-hint  { color:rgba(255,255,255,0.4); font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; transition:color .3s; }
+    .record-hint.active { color:rgba(255,150,150,0.85); }
+    .record-timer { color:rgba(255,255,255,0.55); font-size:1rem; letter-spacing:0.12em; font-variant-numeric:tabular-nums; min-height:1.4rem; }
+    .mic-error    { color:rgba(255,130,130,0.75); font-size:0.72rem; letter-spacing:0.08em; min-height:1rem; max-width:340px; text-align:center; }
+
+    /* Playback */
+    .audio-preview {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .audio-preview audio {
+      width: 100%;
+      max-width: 300px;
+      filter: invert(1) opacity(0.65);
+      height: 32px;
+    }
+    .rerecord-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.3);
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .rerecord-btn:hover { color: rgba(255,255,255,0.7); }
+
+    /* Divider */
+    .upload-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      width: 100%;
+      margin: 0.6rem 0;
+    }
+    .upload-divider::before,
+    .upload-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.1); }
+    .upload-divider span   { color:rgba(255,255,255,0.22); font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; }
+
+    /* File fallback link */
+    .upload-file-label {
+      color: rgba(255,255,255,0.35);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .upload-file-label:hover { color: rgba(255,255,255,0.65); }
+    input[type="file"] { display: none; }
+
+    /* ═══════════════════════════════════════════
+       STEP 5b — TEXT
+    ═══════════════════════════════════════════ */
+    #step-text { justify-content: center; }
+
+    .text-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 520px;
+      z-index: 2;
+    }
+
+    textarea {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 0;
+      color: rgba(255,255,255,0.85);
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      line-height: 1.8;
+      outline: none;
+      padding: 1.2rem 1.4rem;
+      resize: none;
+      width: 100%;
+      height: 200px;
+      transition: border-color 0.3s;
+    }
+    textarea::placeholder { color: rgba(255,255,255,0.2); }
+    textarea:focus { border-color: rgba(255,255,255,0.45); }
+
+    /* Upload doc fallback inside text section */
+    .text-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      width: 100%;
+    }
+    .text-divider::before,
+    .text-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.1); }
+    .text-divider span   { color:rgba(255,255,255,0.22); font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; }
+
+    .text-file-label {
+      color: rgba(255,255,255,0.35);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .text-file-label:hover { color: rgba(255,255,255,0.65); }
+    .text-file-status { color:rgba(255,255,255,0.5); font-size:0.75rem; min-height:1rem; }
+
+    /* ── Thank you ── */
+    .thankyou-name { color:rgba(255,255,255,0.4); font-size:0.85rem; letter-spacing:0.22em; text-transform:uppercase; margin-bottom:1.2rem; }
+
+    /* ── Step indicator ── */
+    .step-indicator {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.8rem;
+      color: rgba(255,255,255,0.18);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      z-index: 10;
+    }
+
+    /* Back link */
+    .back-link {
+      position: absolute;
+      bottom: 1.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.2);
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      z-index: 10;
+    }
+    .back-link:hover { color: rgba(255,255,255,0.5); }
+  </style>
+</head>
+<body>
+
+<!-- ─────────────────────────────────────────
+     STEP 1 · Name + Water Type
+───────────────────────────────────────── -->
+<div class="page active" id="step-1">
+  <span class="step-indicator">01 / 06</span>
+
+  <div class="name-wrap">
+    <h1>What is your name?</h1>
+    <input type="text" id="name-input" placeholder="your name" autocomplete="off" />
+  </div>
+
+  <h1>What type of water do you feel today?</h1>
+  <div class="water-options">
+    <button class="water-btn" data-type="calm">Calm</button>
+    <button class="water-btn" data-type="stormy">Stormy</button>
+    <button class="water-btn" data-type="wavy">Wavy</button>
+  </div>
+
+  <button class="next-btn" id="step1-next" disabled>Continue</button>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     STEP 2a · Calm
+───────────────────────────────────────── -->
+<div class="page" id="step-calm">
+  <span class="step-indicator">02 / 06</span>
+  <h2 id="calm-greeting" style="font-size:0.9rem;letter-spacing:0.22em;opacity:0.4;margin-bottom:1.8rem;text-transform:uppercase;"></h2>
+  <h2>Close your eyes and remember<br>a <em>calm</em> memory next to the water.</h2>
+  <button class="next-btn" onclick="goTo('step-breathe')">Next</button>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     STEP 2b · Stormy
+───────────────────────────────────────── -->
+<div class="page" id="step-stormy">
+  <span class="step-indicator">02 / 06</span>
+  <div class="orb orb-1" style="background:#1e2f4a;filter:blur(100px);opacity:.4;"></div>
+  <h2 id="stormy-greeting" style="font-size:0.9rem;letter-spacing:0.22em;opacity:0.4;margin-bottom:1.8rem;text-transform:uppercase;"></h2>
+  <h2>Close your eyes and remember<br>a <em>stormy</em> memory next to the water.</h2>
+  <button class="next-btn" onclick="goTo('step-breathe')" style="position:relative;z-index:2;">Next</button>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     STEP 2c · Wavy
+───────────────────────────────────────── -->
+<div class="page" id="step-wavy">
+  <span class="step-indicator">02 / 06</span>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <h2 id="wavy-greeting" style="font-size:0.9rem;letter-spacing:0.22em;opacity:0.4;margin-bottom:1.8rem;text-transform:uppercase;"></h2>
+  <h2>Close your eyes and remember<br>a <em>wavy</em> memory next to the water.</h2>
+  <button class="next-btn" onclick="goTo('step-breathe')">Next</button>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     STEP 3 · Breathe
+───────────────────────────────────────── -->
+<div class="page" id="step-breathe">
+  <span class="step-indicator">03 / 06</span>
+  <div class="breathe-lines">
+    <p>Close your eyes.</p>
+    <p>Breathe for 10 seconds.</p>
+  </div>
+  <button class="next-btn" onclick="goTo('step-choose')">Next</button>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     STEP 4 · Choose format
+───────────────────────────────────────── -->
+<div class="page" id="step-choose">
+  <span class="step-indicator">04 / 06</span>
+  <h1 style="margin-bottom:2.4rem;">How would you like<br>to leave your memory?</h1>
+
+  <div class="choose-options">
+    <button class="choose-card" onclick="goTo('step-voice')">
+      <span class="choose-card-icon">🎙</span>
+      <span class="choose-card-label">Voice</span>
+    </button>
+    <button class="choose-card" onclick="goTo('step-text')">
+      <span class="choose-card-icon">✍️</span>
+      <span class="choose-card-label">Text</span>
+    </button>
+  </div>
+
+  <button class="back-link" onclick="goTo('step-breathe')">← back</button>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     STEP 5a · Voice recording
+───────────────────────────────────────── -->
+<div class="page" id="step-voice">
+  <span class="step-indicator">05 / 06</span>
+  <h1 style="margin-bottom:2rem;font-size:1.1rem;letter-spacing:0.1em;opacity:0.7;">Leave your voice memory.</h1>
+
+  <div class="voice-section">
+    <!-- Animated record button -->
+    <div class="record-wrap">
+      <div class="record-ring"   id="record-ring"></div>
+      <div class="record-ring-2" id="record-ring-2"></div>
+      <button class="record-btn" id="record-btn" aria-label="Hold to record">🎙</button>
+    </div>
+
+    <p class="record-hint" id="record-hint">Hold to record</p>
+    <p class="record-timer"  id="record-timer"></p>
+    <p class="mic-error"     id="mic-error"></p>
+
+    <!-- Playback after recording -->
+    <div class="audio-preview" id="audio-preview">
+      <audio id="audio-playback" controls></audio>
+      <button class="rerecord-btn" id="rerecord-btn">↺ Record again</button>
+    </div>
+
+    <!-- Upload fallback -->
+    <div class="upload-divider"><span>or upload a file</span></div>
+    <label for="voice-upload">
+      <span class="upload-file-label" id="voice-file-label">Choose audio file</span>
+      <input type="file" id="voice-upload" accept="audio/*" onchange="voiceFileSelected(this)">
+    </label>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm()">Submit Memory</button>
+  <button class="back-link" onclick="goTo('step-choose')">← back</button>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     STEP 5b · Text memory
+───────────────────────────────────────── -->
+<div class="page" id="step-text">
+  <span class="step-indicator">05 / 06</span>
+  <h1 style="margin-bottom:1.6rem;font-size:1.1rem;letter-spacing:0.1em;opacity:0.7;">Write your memory.</h1>
+
+  <div class="text-section">
+    <textarea
+      id="memory-textarea"
+      placeholder="Begin writing…"
+      spellcheck="false"
+    ></textarea>
+
+    <p class="text-file-status" id="text-file-status"></p>
+
+    <div class="text-divider"><span>or upload a document</span></div>
+    <label for="text-upload">
+      <span class="text-file-label" id="text-file-label">Choose file (.txt · .doc · .pdf)</span>
+      <input type="file" id="text-upload" accept=".txt,.doc,.docx,.pdf" onchange="textFileSelected(this)">
+    </label>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm()">Submit Memory</button>
+  <button class="back-link" onclick="goTo('step-choose')">← back</button>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     STEP 6 · Thank You
+───────────────────────────────────────── -->
+<div class="page" id="step-thankyou">
+  <span class="step-indicator">06 / 06</span>
+  <p class="thankyou-name" id="thankyou-name"></p>
+  <h2>Your memory has been received.<br><br>Thank you.</h2>
+</div>
+
+
+<!-- ─────────────────────────────────────────
+     SCRIPTS
+───────────────────────────────────────── -->
+<script>
+  /* ═══════════════════════════════════════
+     STATE
+  ═══════════════════════════════════════ */
+  let selectedWater = null;
+  let userName      = '';
+  let recordedBlob  = null;   // live recording
+  let voiceFile     = null;   // uploaded audio file
+  let textFile      = null;   // uploaded text file
+
+  /* ═══════════════════════════════════════
+     STEP 1 — name + water
+  ═══════════════════════════════════════ */
+  document.querySelectorAll('.water-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.water-btn').forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedWater = this.dataset.type;
+      validateStep1();
+    });
+  });
+  document.getElementById('name-input').addEventListener('input', validateStep1);
+
+  function validateStep1() {
+    const name = document.getElementById('name-input').value.trim();
+    document.getElementById('step1-next').disabled = !(name && selectedWater);
+  }
+
+  document.getElementById('step1-next').addEventListener('click', function () {
+    if (this.disabled) return;
+    userName = document.getElementById('name-input').value.trim();
+    const g  = userName.toUpperCase();
+    ['calm','stormy','wavy'].forEach(t =>
+      document.getElementById(t + '-greeting').textContent = g
+    );
+    goTo('step-' + selectedWater);
+  });
+
+  /* ═══════════════════════════════════════
+     PAGE TRANSITIONS
+  ═══════════════════════════════════════ */
+  function goTo(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const t = document.getElementById(pageId);
+    t.classList.add('active');
+    t.style.animation = 'none';
+    t.offsetHeight;
+    t.style.animation = '';
+  }
+
+  /* ═══════════════════════════════════════
+     PRESS-AND-HOLD VOICE RECORDER
+  ═══════════════════════════════════════ */
+  const recordBtn   = document.getElementById('record-btn');
+  const recordRing  = document.getElementById('record-ring');
+  const recordRing2 = document.getElementById('record-ring-2');
+  const recordHint  = document.getElementById('record-hint');
+  const recordTimer = document.getElementById('record-timer');
+  const micError    = document.getElementById('mic-error');
+  const audioPreview  = document.getElementById('audio-preview');
+  const audioPlayback = document.getElementById('audio-playback');
+
+  let mediaRecorder = null;
+  let audioChunks   = [];
+  let micStream     = null;
+  let timerInterval = null;
+  let recSeconds    = 0;
+  let isRecording   = false;
+
+  async function startRecording() {
+    if (isRecording) return;
+    micError.textContent = '';
+    try {
+      micStream   = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg';
+
+      mediaRecorder = new MediaRecorder(micStream, { mimeType });
+      mediaRecorder.ondataavailable = e => { if (e.data?.size > 0) audioChunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        recordedBlob = new Blob(audioChunks, { type: mimeType });
+        audioPlayback.src = URL.createObjectURL(recordedBlob);
+        audioPreview.style.display = 'flex';
+        recordHint.textContent = '✓  Recording saved';
+        recordHint.classList.remove('active');
+        recordTimer.textContent = '';
+        micStream.getTracks().forEach(t => t.stop());
+        voiceFile = null;
+        document.getElementById('voice-file-label').textContent = 'Choose audio file';
+      };
+
+      mediaRecorder.start(100);
+      isRecording = true;
+      recordBtn.classList.add('recording');
+      recordRing.classList.add('pulsing');
+      recordRing2.classList.add('pulsing');
+      recordHint.textContent = 'Recording…';
+      recordHint.classList.add('active');
+      recSeconds = 0;
+      recordTimer.textContent = '0:00';
+      timerInterval = setInterval(() => {
+        recSeconds++;
+        recordTimer.textContent = `${Math.floor(recSeconds/60)}:${String(recSeconds%60).padStart(2,'0')}`;
+      }, 1000);
+
+    } catch (err) {
+      micError.textContent = err.name === 'NotAllowedError'
+        ? 'Microphone access denied — please allow it in your browser settings.'
+        : 'Could not access microphone.';
+    }
+  }
+
+  function stopRecording() {
+    if (!isRecording) return;
+    isRecording = false;
+    clearInterval(timerInterval);
+    if (mediaRecorder?.state !== 'inactive') mediaRecorder.stop();
+    recordBtn.classList.remove('recording');
+    recordRing.classList.remove('pulsing');
+    recordRing2.classList.remove('pulsing');
+  }
+
+  recordBtn.addEventListener('mousedown',   e => { e.preventDefault(); startRecording(); });
+  recordBtn.addEventListener('mouseup',     stopRecording);
+  recordBtn.addEventListener('mouseleave',  stopRecording);
+  recordBtn.addEventListener('touchstart',  e => { e.preventDefault(); startRecording(); }, { passive: false });
+  recordBtn.addEventListener('touchend',    e => { e.preventDefault(); stopRecording();  }, { passive: false });
+  recordBtn.addEventListener('touchcancel', stopRecording);
+
+  document.getElementById('rerecord-btn').addEventListener('click', () => {
+    recordedBlob = null;
+    audioPlayback.src = '';
+    audioPreview.style.display = 'none';
+    recordHint.textContent = 'Hold to record';
+    recordTimer.textContent = '';
+    micError.textContent = '';
+  });
+
+  /* ═══════════════════════════════════════
+     FILE INPUTS
+  ═══════════════════════════════════════ */
+  function voiceFileSelected(input) {
+    if (!input.files?.[0]) return;
+    voiceFile    = input.files[0];
+    recordedBlob = null;
+    audioPlayback.src = '';
+    audioPreview.style.display = 'none';
+    recordHint.textContent = 'Hold to record';
+    document.getElementById('voice-file-label').textContent = '✓  ' + voiceFile.name;
+  }
+
+  function textFileSelected(input) {
+    if (!input.files?.[0]) return;
+    textFile = input.files[0];
+    document.getElementById('text-file-label').textContent   = '✓  ' + textFile.name;
+    document.getElementById('text-file-status').textContent  = '';
+    document.getElementById('memory-textarea').value = '';
+  }
+
+  /* ═══════════════════════════════════════
+     SUBMIT
+     ─────────────────────────────────────
+     Replace the console.log below with
+     your chosen endpoint, e.g.:
+       uploadToGoogleDrive(payload)
+       uploadToFormspree(payload)
+  ═══════════════════════════════════════ */
+  function submitForm() {
+    const audio     = recordedBlob || voiceFile;
+    const textTyped = document.getElementById('memory-textarea').value.trim();
+    const textDoc   = textFile;
+
+    const payload = {
+      name:  userName,
+      water: selectedWater,
+      audio,       // Blob or File
+      textTyped,   // string (from textarea)
+      textDoc      // File (.txt / .doc / .pdf)
+    };
+
+    console.log('📤 Submission:', payload);
+
+    // ── Drop-in your upload function here ──
+    // uploadToGoogleDrive(payload);
+
+    document.getElementById('thankyou-name').textContent = userName;
+    goTo('step-thankyou');
+  }
+</script>
+</body>
+</html>
