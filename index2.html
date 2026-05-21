@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>She Tells — Sea Shells</title>
+  <link rel="stylesheet" href="css/style2.css" />
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <span class="brand-title">she tells</span>
+      <span class="brand-sub">——— sea shells</span>
+    </div>
+
+    <nav class="nav-buttons">
+      <button class="btn btn-circle" id="btn-info" aria-haspopup="dialog">?</button>
+      <button class="btn btn-filled" id="btn-memories" aria-haspopup="dialog">
+        Send your memories today!
+      </button>
+      <button class="btn btn-outline">Dunes don't lie baby!</button>
+    </nav>
+  </header>
+
+  <!-- Tagline -->
+  <p class="tagline">— we have lots to tell</p>
+
+  <!-- Illustrations — drop from top, wiggle on land -->
+  <div class="illustrations">
+
+    <div class="illus"
+         style="--size:19vw; --rot-start:-6deg; --rot-end:-3deg; --delay:0s; --duration:1.7s;">
+      <img src="drawings/Asset 7.svg" alt="illustration 1" />
+    </div>
+
+    <div class="illus"
+         style="--size:17vw; --rot-start:4deg; --rot-end:3deg; --delay:0.25s; --duration:1.8s;">
+      <img src="drawings/Asset 8.svg" alt="illustration 2" />
+    </div>
+
+    <div class="illus"
+         style="--size:12vw; --rot-start:-3deg; --rot-end:1deg; --delay:0.45s; --duration:1.65s;">
+      <img src="drawings/Asset 11.svg" alt="illustration 3" />
+    </div>
+
+    <div class="illus"
+         style="--size:22vw; --rot-start:5deg; --rot-end:2deg; --delay:0.15s; --duration:1.9s;">
+      <img src="drawings/Asset 10.svg" alt="illustration 4" />
+    </div>
+
+    <div class="illus"
+         style="--size:16vw; --rot-start:-4deg; --rot-end:-2deg; --delay:0.35s; --duration:1.75s;">
+      <img src="drawings/Asset 9.svg" alt="illustration 5" />
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Info overlay -->
+<div class="overlay" id="overlay-info" role="dialog" aria-modal="true">
+  <div class="overlay-box">
+    <button class="overlay-close" id="close-info" aria-label="Close">✕</button>
+    <h2 class="overlay-title">Info</h2>
+    <div class="overlay-body">
+      <p>Add your project description here.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Memories overlay -->
+<div class="overlay" id="overlay-memories" role="dialog" aria-modal="true">
+  <div class="overlay-box">
+    <button class="overlay-close" id="close-memories" aria-label="Close">✕</button>
+    <h2 class="overlay-title">Send your memories</h2>
+    <div class="overlay-body">
+      <p>Form coming soon.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Overlays ── */
+  const openOverlay  = id => { document.getElementById(id).classList.add('active');    document.body.style.overflow = 'hidden'; };
+  const closeOverlay = id => { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; };
+
+  document.getElementById('btn-info').addEventListener('click',       () => openOverlay('overlay-info'));
+  document.getElementById('close-info').addEventListener('click',     () => closeOverlay('overlay-info'));
+  document.getElementById('btn-memories').addEventListener('click',   () => openOverlay('overlay-memories'));
+  document.getElementById('close-memories').addEventListener('click', () => closeOverlay('overlay-memories'));
+
+  document.querySelectorAll('.overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) closeOverlay(el.id); });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape')
+      document.querySelectorAll('.overlay.active').forEach(el => closeOverlay(el.id));
+  });
+
+  /* ── Trigger drop animation after fonts + images are ready ── */
+  async function kickAnimations() {
+    await document.fonts.ready;
+
+    // Wait for all images to load so sizes are known
+    const imgs = [...document.querySelectorAll('.illus img')];
+    await Promise.all(imgs.map(img =>
+      img.complete ? Promise.resolve() : new Promise(r => { img.onload = r; img.onerror = r; })
+    ));
+
+    // Small tick so the browser has painted the initial transform state
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.querySelectorAll('.illus').forEach(el => el.classList.add('animate'));
+    }));
+  }
+
+  kickAnimations();
+</script>
+
+</body>
+</html>
