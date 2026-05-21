@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>She Tells — Sea Shells</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- Background -->
+    <div class="bg"></div>
+
+    <!-- Brand (difference blend) -->
+    <div class="nav-brand">
+      <span class="brand-title">sea shells</span>
+      <span class="brand-sub">We have lots to tell</span>
+    </div>
+
+    <!-- Buttons (full colours, no blend) -->
+    <div class="nav-actions">
+      <button class="btn btn-primary" id="btn-memories" aria-haspopup="dialog">
+        Tell us Your Memories
+        <span class="arrow" aria-hidden="true">↗</span>
+      </button>
+      <button class="btn btn-secondary" id="btn-info" aria-haspopup="dialog">
+        Info
+      </button>
+    </div>
+
+    <!-- Mid text -->
+    <div class="mid">
+      <p class="mid-text">
+        A critical tool kit<br>
+        for listening<br>
+        &amp; remembering
+      </p>
+    </div>
+
+    <!-- Bottom title -->
+    <div class="she-tells" aria-hidden="true">
+      <span class="she-tells-text">she tells</span>
+    </div>
+
+  </div>
+
+  <!-- Info overlay -->
+  <div class="overlay" id="overlay-info" role="dialog" aria-modal="true" aria-labelledby="info-title">
+    <div class="overlay-box">
+      <button class="overlay-close" id="close-info" aria-label="Close">✕</button>
+      <h2 class="overlay-title" id="info-title">Info</h2>
+      <div class="overlay-body">
+        <p>Add your project description here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Memories overlay (placeholder — form to be added) -->
+  <div class="overlay" id="overlay-memories" role="dialog" aria-modal="true" aria-labelledby="memories-title">
+    <div class="overlay-box">
+      <button class="overlay-close" id="close-memories" aria-label="Close">✕</button>
+      <h2 class="overlay-title" id="memories-title">Tell us Your Memories</h2>
+      <div class="overlay-body">
+        <p>Form coming soon.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ── Overlay logic ── */
+    function openOverlay(id) {
+      document.getElementById(id).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeOverlay(id) {
+      document.getElementById(id).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('btn-info').addEventListener('click', () => openOverlay('overlay-info'));
+    document.getElementById('close-info').addEventListener('click', () => closeOverlay('overlay-info'));
+    document.getElementById('btn-memories').addEventListener('click', () => openOverlay('overlay-memories'));
+    document.getElementById('close-memories').addEventListener('click', () => closeOverlay('overlay-memories'));
+
+    document.querySelectorAll('.overlay').forEach(el => {
+      el.addEventListener('click', e => { if (e.target === el) closeOverlay(el.id); });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape')
+        document.querySelectorAll('.overlay.active').forEach(el => closeOverlay(el.id));
+    });
+
+    /* ── Layout: fit "she tells" + align text ── */
+
+    // Render a hidden span to measure rendered text width (respects custom fonts)
+    function measureRenderedWidth(text, styles) {
+      const span = document.createElement('span');
+      Object.assign(span.style, {
+        position: 'absolute',
+        visibility: 'hidden',
+        whiteSpace: 'nowrap',
+        top: '-9999px',
+        left: '-9999px',
+        padding: '0',
+        margin: '0',
+        border: '0',
+      }, styles);
+      span.textContent = text;
+      document.body.appendChild(span);
+      const w = span.getBoundingClientRect().width;
+      document.body.removeChild(span);
+      return w;
+    }
+
+    async function doLayout() {
+      await document.fonts.ready;
+
+      const sheTellsEl  = document.querySelector('.she-tells-text');
+      const midEl       = document.querySelector('.mid');
+      const brandSub    = document.querySelector('.brand-sub');
+      const brandTitle  = document.querySelector('.brand-title');
+      const vw          = window.innerWidth;
+
+      // 1. Binary-search the font size that makes "she tells" exactly fill the viewport
+      const sheStyles = {
+        fontFamily: "'NaNTresor', serif",
+        fontWeight: '400',   /* Regular */
+        letterSpacing: '-0.02em',
+      };
+
+      let lo = 50, hi = 700;
+      while (hi - lo > 0.2) {
+        const mid = (lo + hi) / 2;
+        const w = measureRenderedWidth('she tells', { ...sheStyles, fontSize: mid + 'px' });
+        if (w < vw) lo = mid; else hi = mid;
+      }
+      sheTellsEl.style.fontSize = lo + 'px';
+
+      // 3. Align "We have lots to tell" (inline-block) with the 'l' of "shells"
+      const brandFs = getComputedStyle(brandTitle).fontSize;
+      const brandStyles = {
+        fontFamily: "'NaNTresor', serif",
+        fontWeight: '400',
+        letterSpacing: '-0.01em',
+        fontSize: brandFs,
+      };
+      const seaSheWidth = measureRenderedWidth('sea she', brandStyles);
+      brandSub.style.marginLeft = seaSheWidth + 'px';
+
+      // 2. Position "A critical tool kit" aligned with top of 'h' in "she tells"
+      //    Must wait for reflow after setting font-size before reading Range rect
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const textNode = sheTellsEl.firstChild;
+        const range = document.createRange();
+        range.setStart(textNode, 1); // index 0 = 's', index 1 = 'h'
+        range.setEnd(textNode, 2);
+        const hRect = range.getBoundingClientRect();
+        if (hRect.width > 0) {
+          midEl.style.left = hRect.left + 'px';
+          midEl.style.top  = hRect.top  + 'px';
+        }
+      }));
+    }
+
+    doLayout();
+    window.addEventListener('resize', doLayout);
+  </script>
+
+</body>
+</html>
