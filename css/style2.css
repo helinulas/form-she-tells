@@ -41,14 +41,14 @@ html, body {
   flex-direction: column;
 }
 
-/* ── Header ── */
+/* ── Header — 1rem (16px) from each corner ── */
 .header {
   position: relative;
   z-index: 10;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  padding: 2rem 2.4rem 0;
+  padding: 1rem 1rem 0;
   flex-shrink: 0;
 }
 
@@ -60,7 +60,7 @@ html, body {
 
 .brand-title {
   font-family: 'NaNTresor', serif;
-  font-weight: 400;
+  font-weight: 700;
   font-size: clamp(52px, 7.5vw, 108px);
   line-height: 1;
   color: var(--black);
@@ -145,15 +145,15 @@ html, body {
   white-space: nowrap;
 }
 
-/* ── Illustrations row ── */
+/* ── Illustrations — centred in the space below the header ── */
 .illustrations {
   position: absolute;
+  top: 110px;       /* just below the header */
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 62vh;                  /* bottom 62% of the page */
   display: flex;
-  align-items: flex-end;
+  align-items: center;   /* vertical centre = final resting position */
   justify-content: space-around;
   padding: 0 4vw;
   z-index: 5;
@@ -162,7 +162,8 @@ html, body {
 
 .illus {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  /* starts hidden above viewport; JS adds .animate to trigger */
   transform: translateY(-110vh) rotate(var(--rot-start, 0deg));
   will-change: transform;
 }
@@ -171,34 +172,56 @@ html, body {
   display: block;
   width: var(--size, 18vw);
   height: auto;
-  max-height: 55vh;
+  max-height: 48vh;
   object-fit: contain;
   transform-origin: bottom center;
 }
 
-/* ── Drop + wiggle keyframe ── */
-@keyframes drop-wiggle {
-  0%   {
+/* ─────────────────────────────────────────────────────────────────
+   3-phase animation:
+     Phase 1 (0 → 55%)  — fall from above, through resting spot, to floor
+     Phase 2 (55 → 78%) — bounce + wiggle at floor
+     Phase 3 (78 → 100%) — float gently back up to resting position (translateY 0)
+────────────────────────────────────────────────────────────────── */
+@keyframes drop-bounce-rise {
+  0% {
     transform: translateY(-110vh) rotate(var(--rot-start, -4deg));
-    animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.6);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.55);
   }
-  58%  {
-    transform: translateY(0) scaleY(0.93) rotate(var(--rot-end, 2deg));
+  /* hit the floor */
+  55% {
+    transform: translateY(44vh) scaleY(0.88) rotate(var(--rot-end, 2deg));
     animation-timing-function: ease-out;
   }
-  64%  { transform: translateY(-22px) scaleY(1.04) rotate(calc(var(--rot-end, 2deg) - 3deg)); }
-  70%  { transform: translateY(0)    scaleY(1)    rotate(var(--rot-end, 2deg)); }
-  /* wiggle */
-  75%  { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) - 5deg)); }
-  80%  { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) + 5deg)); }
-  85%  { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) - 3deg)); }
-  90%  { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) + 3deg)); }
-  95%  { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) - 1deg)); }
-  100% { transform: translateY(0) rotate(var(--rot-end, 2deg)); }
+  /* bounce up from floor */
+  61% {
+    transform: translateY(calc(44vh - 30px)) scaleY(1.06)
+               rotate(calc(var(--rot-end, 2deg) - 7deg));
+  }
+  66% {
+    transform: translateY(44vh) scaleY(1)
+               rotate(calc(var(--rot-end, 2deg) + 7deg));
+  }
+  70% {
+    transform: translateY(calc(44vh - 12px))
+               rotate(calc(var(--rot-end, 2deg) - 4deg));
+  }
+  74% {
+    transform: translateY(44vh)
+               rotate(calc(var(--rot-end, 2deg) + 3deg));
+  }
+  78% {
+    transform: translateY(44vh) rotate(var(--rot-end, 2deg));
+    animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
+  }
+  /* float up to resting position */
+  100% {
+    transform: translateY(0) rotate(var(--rot-end, 2deg));
+  }
 }
 
 .illus.animate {
-  animation: drop-wiggle var(--duration, 1.8s) var(--delay, 0s) cubic-bezier(0.4,0,1,1) both;
+  animation: drop-bounce-rise var(--duration, 2.4s) var(--delay, 0s) both;
 }
 
 /* ── Overlay (shared) ── */
