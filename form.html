@@ -185,14 +185,38 @@
     }
     .back-link:hover { color: var(--black); }
 
-    /* ── Breathe ── */
-    .breathe-lines { display: flex; flex-direction: column; gap: 0.6rem; }
-    .breathe-lines p {
+    /* ── Breathe countdown ── */
+    .breathe-label {
+      font-family: 'CeleScript', cursive;
+      font-size: clamp(11px, 1.1vw, 14px);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(17,17,17,0.3);
+      margin-bottom: 0.6rem;
+    }
+    .breathe-count-wrap {
+      overflow: hidden;
+      height: clamp(100px, 18vw, 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .breathe-count {
       font-family: 'NaNTresor', serif;
       font-weight: 200;
+      font-size: clamp(100px, 18vw, 200px);
+      line-height: 1;
       color: var(--black);
-      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-      letter-spacing: 0.04em;
+      display: block;
+      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease;
+    }
+    .breathe-count.roll-out {
+      transform: translateY(-60px);
+      opacity: 0;
+    }
+    .breathe-count.roll-in {
+      transform: translateY(60px);
+      opacity: 0;
     }
 
     /* ── Choose format cards ── */
@@ -429,16 +453,14 @@
       margin-bottom: 1.2rem;
     }
 
-    /* ── Step background tints — drawn from card palette, very subtle ── */
+    /* ── Step backgrounds ── */
 
-    /* Sexy Dunes: warm sandy brown */
-    #step-1 {
-      background: linear-gradient(160deg, #fdf8f3 0%, #f5e9d8 100%);
-    }
+    /* Step 1: plain white */
+    #step-1 { background: var(--white); }
 
-    /* Calm → Sexy Dunes sandy warmth */
+    /* Calm → Sargassum City: dark mossy green, very subtle */
     #step-calm {
-      background: linear-gradient(160deg, #faf5ed 0%, #f0e2c8 100%);
+      background: linear-gradient(160deg, #eef5ec 0%, #d4e8cc 60%, #c2dbb8 100%);
     }
 
     /* Stormy → Acid Tabs pink/magenta */
@@ -451,15 +473,11 @@
       background: linear-gradient(160deg, #f0f5ff 0%, #d8e8fc 100%);
     }
 
-    /* Breathe/Choose → Shell Cream green */
-    #step-breathe, #step-choose {
-      background: linear-gradient(160deg, #f0faf4 0%, #d8f0e4 100%);
-    }
+    /* Breathe + Choose: plain white */
+    #step-breathe, #step-choose { background: var(--white); }
 
-    /* Voice/Text/Thankyou → neutral warm white */
-    #step-voice, #step-text, #step-thankyou {
-      background: linear-gradient(160deg, #fdfcfb 0%, #f8f4ef 100%);
-    }
+    /* Voice / Text / Thank you: plain white */
+    #step-voice, #step-text, #step-thankyou { background: var(--white); }
 
     /* ── Orbs — tinted to match each step ── */
     .orb {
@@ -549,11 +567,10 @@
 ───────────────────────────────────────── -->
 <div class="page" id="step-breathe">
   <span class="step-indicator">03 / 06</span>
-  <div class="breathe-lines">
-    <p>Close your eyes.</p>
-    <p>Breathe for 10 seconds.</p>
+  <p class="breathe-label">breathe</p>
+  <div class="breathe-count-wrap">
+    <span class="breathe-count" id="breathe-count">10</span>
   </div>
-  <button class="next-btn" onclick="goTo('step-choose')">Next</button>
 </div>
 
 
@@ -699,6 +716,8 @@
   /* ═══════════════════════════════════════
      PAGE TRANSITIONS
   ═══════════════════════════════════════ */
+  let breatheTimer = null;
+
   function goTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const t = document.getElementById(pageId);
@@ -706,6 +725,34 @@
     t.style.animation = 'none';
     t.offsetHeight;
     t.style.animation = '';
+    if (pageId === 'step-breathe') startBreatheCountdown();
+  }
+
+  function startBreatheCountdown() {
+    if (breatheTimer) clearInterval(breatheTimer);
+    let count = 10;
+    const el = document.getElementById('breathe-count');
+    el.textContent = count;
+    el.classList.remove('roll-out', 'roll-in');
+
+    breatheTimer = setInterval(() => {
+      // roll current number out upward
+      el.classList.add('roll-out');
+      setTimeout(() => {
+        count--;
+        el.classList.remove('roll-out');
+        el.classList.add('roll-in');
+        el.textContent = count;
+        // force reflow then animate in
+        el.offsetHeight;
+        el.classList.remove('roll-in');
+
+        if (count === 0) {
+          clearInterval(breatheTimer);
+          setTimeout(() => goTo('step-choose'), 600);
+        }
+      }, 220);
+    }, 1000);
   }
 
   /* ═══════════════════════════════════════
