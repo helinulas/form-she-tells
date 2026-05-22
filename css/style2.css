@@ -332,8 +332,8 @@ html, body {
   text-transform: uppercase;
   color: var(--white);
   white-space: nowrap;
-  /* nudge slightly upward to sit in the visual centre of the blob */
-  padding-bottom: 0.15em;
+  /* lift text into the visual centre of the drawn blob (not the bounding box) */
+  padding-bottom: 28%;
 }
 
 /* ── Page disclaimer — bottom right ── */
