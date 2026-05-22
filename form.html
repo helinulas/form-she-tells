@@ -3,14 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Water Memory</title>
+  <title>Water Memory — She Tells</title>
   <style>
+    @font-face {
+      font-family: 'CeleScript';
+      src: url('Fonts/Celescript (2).ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'NaNTresor';
+      src: url('Fonts/NaNTresor/ttf/NaNTresorM-ExtraLight.ttf') format('truetype');
+      font-weight: 200;
+    }
+    @font-face {
+      font-family: 'NaNTresor';
+      src: url('Fonts/NaNTresor/ttf/NaNTresorM-Regular.ttf') format('truetype');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'NaNTresor';
+      src: url('Fonts/NaNTresor/ttf/NaNTresorM-Bold.ttf') format('truetype');
+      font-weight: 700;
+    }
+
+    :root {
+      --black: #111111;
+      --white: #ffffff;
+      --brown: #5B2915;
+      --grey:  rgba(17,17,17,0.12);
+    }
+
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: 'Georgia', serif;
-      height: 100vh;
+    html, body {
+      width: 100%;
+      height: 100%;
       overflow: hidden;
+      background: var(--white);
     }
 
     /* ── Page system ── */
@@ -24,164 +52,184 @@
       text-align: center;
       position: relative;
       overflow: hidden;
-      animation: fadeIn 1.4s ease;
+      background: var(--white);
+      animation: fadeIn 1s ease;
     }
     .page.active { display: flex; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ── Typography ── */
     h1 {
-      color: rgba(255,255,255,0.9);
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      font-weight: 300;
-      letter-spacing: 0.06em;
-      margin-bottom: 1.6rem;
-      line-height: 1.5;
+      font-family: 'NaNTresor', serif;
+      font-weight: 200;
+      color: var(--black);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 1.8rem;
+      line-height: 1.2;
     }
     h2 {
-      color: rgba(255,255,255,0.88);
-      font-size: clamp(1.2rem, 2.5vw, 1.7rem);
-      font-weight: 300;
-      letter-spacing: 0.08em;
-      line-height: 1.8;
+      font-family: 'NaNTresor', serif;
+      font-weight: 200;
+      color: var(--black);
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      letter-spacing: -0.01em;
+      line-height: 1.5;
       max-width: 600px;
       position: relative;
       z-index: 2;
     }
-    h2 em { font-style: italic; opacity: 0.85; }
+    h2 em { font-style: italic; color: var(--brown); }
 
     /* ── Name input ── */
     .name-wrap { margin-bottom: 2.4rem; }
     input[type="text"] {
       background: transparent;
       border: none;
-      border-bottom: 1px solid rgba(255,255,255,0.45);
-      color: white;
-      font-family: Georgia, serif;
-      font-size: 1.25rem;
+      border-bottom: 1.5px solid var(--black);
+      color: var(--black);
+      font-family: 'CeleScript', cursive;
+      font-size: 1.2rem;
       letter-spacing: 0.08em;
       outline: none;
       padding: 0.4rem 0;
       text-align: center;
       width: 280px;
+      transition: border-color 0.2s;
     }
-    input[type="text"]::placeholder { color: rgba(255,255,255,0.3); }
+    input[type="text"]:focus { border-color: var(--brown); }
+    input[type="text"]::placeholder { color: rgba(17,17,17,0.3); }
 
     /* ── Water buttons ── */
     .water-options {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.9rem;
+      gap: 0.75rem;
       justify-content: center;
       margin-bottom: 2.4rem;
     }
     .water-btn {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.35);
-      color: rgba(255,255,255,0.75);
+      border: 1.5px solid rgba(17,17,17,0.3);
+      color: rgba(17,17,17,0.6);
       cursor: pointer;
-      font-family: Georgia, serif;
-      font-size: 1rem;
-      letter-spacing: 0.12em;
-      padding: 0.75rem 2.2rem;
-      transition: all 0.35s ease;
+      font-family: 'CeleScript', cursive;
+      font-size: clamp(11px, 1.2vw, 15px);
+      letter-spacing: 0.1em;
+      padding: 0.6rem 2rem;
+      border-radius: 2rem;
+      transition: all 0.25s ease;
     }
-    .water-btn:hover  { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.65); color: white; }
-    .water-btn.selected { background: rgba(255,255,255,0.15); border-color: white; color: white; }
+    .water-btn:hover { border-color: var(--black); color: var(--black); }
+    .water-btn.selected {
+      background: var(--brown);
+      border-color: var(--brown);
+      color: var(--white);
+    }
 
-    /* ── Nav / action buttons ── */
+    /* ── Primary action buttons ── */
     .next-btn, .submit-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.45);
-      color: rgba(255,255,255,0.85);
+      background: var(--black);
+      border: none;
+      color: var(--white);
       cursor: pointer;
-      font-family: Georgia, serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.22em;
-      margin-top: 2.6rem;
-      padding: 0.8rem 3rem;
-      position: relative;
+      font-family: 'CeleScript', cursive;
+      font-size: clamp(11px, 1.1vw, 14px);
+      letter-spacing: 0.1em;
+      margin-top: 2.4rem;
+      padding: 0.65rem 2.8rem;
+      border-radius: 2rem;
       text-transform: uppercase;
-      transition: all 0.3s ease;
+      transition: background 0.2s, transform 0.1s;
+      position: relative;
       z-index: 2;
     }
-    .next-btn:hover, .submit-btn:hover { background: rgba(255,255,255,0.1); border-color: white; color: white; }
-    .next-btn:disabled { opacity: 0.3; cursor: default; }
+    .next-btn:hover, .submit-btn:hover { background: #333; }
+    .next-btn:active, .submit-btn:active { transform: scale(0.97); }
+    .next-btn:disabled { opacity: 0.25; cursor: default; }
 
-    /* ── Backgrounds ── */
-    #step-1         { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
-    #step-calm      { background: linear-gradient(180deg, #020e1f 0%, #0b2653 55%, #1a4a8a 100%); }
-    #step-stormy    { background: linear-gradient(180deg, #111827 0%, #1e2f4a 50%, #2d3b5e 100%); }
-    #step-wavy      { background: #140828; }
-    #step-breathe   { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
-    #step-choose    { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
-    #step-voice     { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
-    #step-text      { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
-    #step-thankyou  { background: linear-gradient(160deg, #06111e 0%, #0d2645 100%); }
-
-    /* ── Wavy orbs ── */
-    .orb {
+    /* ── Step indicator ── */
+    .step-indicator {
       position: absolute;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.55;
-      pointer-events: none;
+      top: 1.5rem;
+      left: 1.8rem;
+      font-family: 'CeleScript', cursive;
+      color: rgba(17,17,17,0.25);
+      font-size: clamp(9px, 1vw, 12px);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      z-index: 10;
     }
-    .orb-1 { width:480px; height:480px; background:#5b21b6; top:-160px; left:-140px; animation:drift1 10s ease-in-out infinite; }
-    .orb-2 { width:420px; height:420px; background:#1d4ed8; bottom:-120px; right:-100px; animation:drift2 12s ease-in-out infinite; }
-    .orb-3 { width:320px; height:320px; background:#7c3aed; top:50%; left:52%; transform:translate(-50%,-50%); animation:drift3 9s ease-in-out infinite; }
-    @keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(50px,40px) scale(1.08)} }
-    @keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-45px,-35px) scale(1.06)} }
-    @keyframes drift3 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,calc(-50% + 28px)) scale(1.04)} }
+
+    /* ── Back link ── */
+    .back-link {
+      position: absolute;
+      bottom: 1.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: none;
+      border: none;
+      color: rgba(17,17,17,0.3);
+      cursor: pointer;
+      font-family: 'CeleScript', cursive;
+      font-size: clamp(9px, 1vw, 12px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      z-index: 10;
+      white-space: nowrap;
+    }
+    .back-link:hover { color: var(--black); }
 
     /* ── Breathe ── */
-    .breathe-lines { display:flex; flex-direction:column; gap:0.6rem; z-index:2; }
-    .breathe-lines p { color:rgba(255,255,255,0.85); font-size:clamp(1rem,2.2vw,1.35rem); font-weight:300; letter-spacing:0.18em; }
+    .breathe-lines { display: flex; flex-direction: column; gap: 0.6rem; }
+    .breathe-lines p {
+      font-family: 'NaNTresor', serif;
+      font-weight: 200;
+      color: var(--black);
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      letter-spacing: 0.04em;
+    }
 
-    /* ═══════════════════════════════════════════
-       STEP 4 — CHOOSE FORMAT
-    ═══════════════════════════════════════════ */
+    /* ── Choose format cards ── */
     .choose-options {
       display: flex;
-      gap: 1.4rem;
+      gap: 1.2rem;
       margin-top: 0.5rem;
       z-index: 2;
     }
     .choose-card {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.3);
-      color: rgba(255,255,255,0.75);
+      border: 1.5px solid rgba(17,17,17,0.2);
+      color: rgba(17,17,17,0.6);
       cursor: pointer;
-      font-family: Georgia, serif;
+      font-family: 'CeleScript', cursive;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.8rem;
-      padding: 2rem 2.6rem;
-      transition: all 0.35s ease;
-      width: 160px;
+      padding: 2rem 2.4rem;
+      border-radius: 0.8rem;
+      transition: all 0.25s ease;
+      width: 150px;
     }
     .choose-card:hover {
-      background: rgba(255,255,255,0.07);
-      border-color: rgba(255,255,255,0.7);
-      color: white;
+      border-color: var(--brown);
+      color: var(--brown);
     }
-    .choose-card-icon { font-size: 2rem; line-height: 1; }
+    .choose-card-icon { font-size: 1.8rem; line-height: 1; }
     .choose-card-label {
-      font-size: 0.8rem;
+      font-size: clamp(9px, 1vw, 12px);
       letter-spacing: 0.18em;
       text-transform: uppercase;
     }
 
-    /* ═══════════════════════════════════════════
-       STEP 5a — VOICE
-    ═══════════════════════════════════════════ */
+    /* ── Voice recording ── */
     #step-voice { justify-content: center; gap: 0; }
-
     .voice-section {
       display: flex;
       flex-direction: column;
@@ -189,10 +237,7 @@
       gap: 0.55rem;
       width: 100%;
       max-width: 400px;
-      z-index: 2;
     }
-
-    /* Pulsing ring wrapper */
     .record-wrap {
       position: relative;
       display: flex;
@@ -206,28 +251,27 @@
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.2);
+      border: 1.5px solid rgba(17,17,17,0.15);
       transition: transform 0.3s, opacity 0.3s;
     }
-    .record-ring.pulsing  { animation: ringPulse  1s ease-in-out infinite; border-color: rgba(255,90,90,0.6); }
+    .record-ring.pulsing  { animation: ringPulse 1s ease-in-out infinite; border-color: rgba(91,41,21,0.5); }
     .record-ring-2 {
       position: absolute;
       inset: -12px;
       border-radius: 50%;
       border: 1px solid transparent;
     }
-    .record-ring-2.pulsing { animation: ringPulse2 1s ease-in-out infinite 0.25s; border-color: rgba(255,90,90,0.3); }
-
-    @keyframes ringPulse  { 0%,100%{transform:scale(1); opacity:.8} 50%{transform:scale(1.5); opacity:.15} }
-    @keyframes ringPulse2 { 0%,100%{transform:scale(1); opacity:.5} 50%{transform:scale(1.65);opacity:0}   }
+    .record-ring-2.pulsing { animation: ringPulse2 1s ease-in-out infinite 0.25s; border-color: rgba(91,41,21,0.25); }
+    @keyframes ringPulse  { 0%,100%{transform:scale(1);opacity:.8} 50%{transform:scale(1.5);opacity:.15} }
+    @keyframes ringPulse2 { 0%,100%{transform:scale(1);opacity:.5} 50%{transform:scale(1.65);opacity:0}   }
 
     .record-btn {
       width: 76px;
       height: 76px;
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.5);
-      background: rgba(255,255,255,0.06);
-      color: white;
+      border: 1.5px solid rgba(17,17,17,0.3);
+      background: transparent;
+      color: var(--black);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -240,16 +284,40 @@
       touch-action: none;
       z-index: 1;
     }
+    .record-btn:hover { background: rgba(17,17,17,0.05); border-color: var(--black); }
     .record-btn.recording {
-      background: rgba(220,60,60,0.25);
-      border-color: rgba(255,100,100,0.8);
+      background: rgba(91,41,21,0.08);
+      border-color: var(--brown);
       transform: scale(0.95);
     }
 
-    .record-hint  { color:rgba(255,255,255,0.4); font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; transition:color .3s; }
-    .record-hint.active { color:rgba(255,150,150,0.85); }
-    .record-timer { color:rgba(255,255,255,0.55); font-size:1rem; letter-spacing:0.12em; font-variant-numeric:tabular-nums; min-height:1.4rem; }
-    .mic-error    { color:rgba(255,130,130,0.75); font-size:0.72rem; letter-spacing:0.08em; min-height:1rem; max-width:340px; text-align:center; }
+    .record-hint {
+      font-family: 'CeleScript', cursive;
+      color: rgba(17,17,17,0.4);
+      font-size: clamp(9px, 1vw, 12px);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transition: color .3s;
+    }
+    .record-hint.active { color: var(--brown); }
+    .record-timer {
+      font-family: 'NaNTresor', serif;
+      font-weight: 400;
+      color: rgba(17,17,17,0.5);
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      font-variant-numeric: tabular-nums;
+      min-height: 1.4rem;
+    }
+    .mic-error {
+      font-family: 'CeleScript', cursive;
+      color: var(--brown);
+      font-size: clamp(9px, 1vw, 12px);
+      letter-spacing: 0.08em;
+      min-height: 1rem;
+      max-width: 340px;
+      text-align: center;
+    }
 
     /* Playback */
     .audio-preview {
@@ -262,52 +330,61 @@
     .audio-preview audio {
       width: 100%;
       max-width: 300px;
-      filter: invert(1) opacity(0.65);
       height: 32px;
     }
     .rerecord-btn {
       background: transparent;
       border: none;
-      color: rgba(255,255,255,0.3);
+      color: rgba(17,17,17,0.35);
       cursor: pointer;
-      font-family: Georgia, serif;
-      font-size: 0.72rem;
+      font-family: 'CeleScript', cursive;
+      font-size: clamp(9px, 1vw, 11px);
       letter-spacing: 0.14em;
       text-transform: uppercase;
       transition: color 0.2s;
     }
-    .rerecord-btn:hover { color: rgba(255,255,255,0.7); }
+    .rerecord-btn:hover { color: var(--black); }
 
-    /* Divider */
-    .upload-divider {
+    /* Dividers */
+    .upload-divider, .text-divider {
       display: flex;
       align-items: center;
       gap: 0.8rem;
       width: 100%;
       margin: 0.6rem 0;
     }
-    .upload-divider::before,
-    .upload-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.1); }
-    .upload-divider span   { color:rgba(255,255,255,0.22); font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; }
+    .upload-divider::before, .upload-divider::after,
+    .text-divider::before,   .text-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(17,17,17,0.1);
+    }
+    .upload-divider span, .text-divider span {
+      font-family: 'CeleScript', cursive;
+      color: rgba(17,17,17,0.3);
+      font-size: clamp(8px, 0.9vw, 11px);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
 
-    /* File fallback link */
-    .upload-file-label {
-      color: rgba(255,255,255,0.35);
-      font-size: 0.75rem;
+    /* File labels */
+    .upload-file-label, .text-file-label {
+      font-family: 'CeleScript', cursive;
+      color: rgba(17,17,17,0.4);
+      font-size: clamp(9px, 1vw, 12px);
       letter-spacing: 0.12em;
       text-decoration: underline;
       text-underline-offset: 3px;
+      text-decoration-color: var(--brown);
       cursor: pointer;
       transition: color 0.2s;
     }
-    .upload-file-label:hover { color: rgba(255,255,255,0.65); }
+    .upload-file-label:hover, .text-file-label:hover { color: var(--brown); }
     input[type="file"] { display: none; }
 
-    /* ═══════════════════════════════════════════
-       STEP 5b — TEXT
-    ═══════════════════════════════════════════ */
+    /* ── Text memory ── */
     #step-text { justify-content: center; }
-
     .text-section {
       display: flex;
       flex-direction: column;
@@ -315,17 +392,16 @@
       gap: 1rem;
       width: 100%;
       max-width: 520px;
-      z-index: 2;
     }
-
     textarea {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      border: 1.5px solid rgba(17,17,17,0.15);
       border-radius: 0;
-      color: rgba(255,255,255,0.85);
-      font-family: Georgia, serif;
+      color: var(--black);
+      font-family: 'NaNTresor', serif;
+      font-weight: 400;
       font-size: 1rem;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
       line-height: 1.8;
       outline: none;
       padding: 1.2rem 1.4rem;
@@ -334,65 +410,39 @@
       height: 200px;
       transition: border-color 0.3s;
     }
-    textarea::placeholder { color: rgba(255,255,255,0.2); }
-    textarea:focus { border-color: rgba(255,255,255,0.45); }
-
-    /* Upload doc fallback inside text section */
-    .text-divider {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      width: 100%;
+    textarea::placeholder { color: rgba(17,17,17,0.25); }
+    textarea:focus { border-color: var(--brown); }
+    .text-file-status {
+      font-family: 'CeleScript', cursive;
+      color: rgba(17,17,17,0.5);
+      font-size: clamp(9px, 1vw, 12px);
+      min-height: 1rem;
     }
-    .text-divider::before,
-    .text-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.1); }
-    .text-divider span   { color:rgba(255,255,255,0.22); font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; }
-
-    .text-file-label {
-      color: rgba(255,255,255,0.35);
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .text-file-label:hover { color: rgba(255,255,255,0.65); }
-    .text-file-status { color:rgba(255,255,255,0.5); font-size:0.75rem; min-height:1rem; }
 
     /* ── Thank you ── */
-    .thankyou-name { color:rgba(255,255,255,0.4); font-size:0.85rem; letter-spacing:0.22em; text-transform:uppercase; margin-bottom:1.2rem; }
-
-    /* ── Step indicator ── */
-    .step-indicator {
-      position: absolute;
-      top: 1.5rem;
-      left: 1.8rem;
-      color: rgba(255,255,255,0.18);
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
+    .thankyou-name {
+      font-family: 'CeleScript', cursive;
+      color: rgba(17,17,17,0.4);
+      font-size: clamp(9px, 1vw, 13px);
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      z-index: 10;
+      margin-bottom: 1.2rem;
     }
 
-    /* Back link */
-    .back-link {
+    /* ── Subtle orb accents — sandy/warm tones only ── */
+    .orb {
       position: absolute;
-      bottom: 1.8rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.2);
-      cursor: pointer;
-      font-family: Georgia, serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-      z-index: 10;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.18;
+      pointer-events: none;
     }
-    .back-link:hover { color: rgba(255,255,255,0.5); }
+    .orb-1 { width: 480px; height: 480px; background: #c4a882; top: -160px; left: -140px; animation: drift1 10s ease-in-out infinite; }
+    .orb-2 { width: 420px; height: 420px; background: #a08060; bottom: -120px; right: -100px; animation: drift2 12s ease-in-out infinite; }
+    .orb-3 { width: 320px; height: 320px; background: #d4b896; top: 50%; left: 52%; transform: translate(-50%,-50%); animation: drift3 9s ease-in-out infinite; }
+    @keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(50px,40px) scale(1.08)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-45px,-35px) scale(1.06)} }
+    @keyframes drift3 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,calc(-50% + 28px)) scale(1.04)} }
   </style>
 </head>
 <body>
