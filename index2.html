@@ -4,11 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>She Tells — Sea Shells</title>
-  <link rel="stylesheet" href="css/style2.css" />
+  <link rel="stylesheet" href="css/style2.css?v=10" />
 </head>
 <body>
 
 <div class="page">
+
+  <!-- Background layer — hidden until spiral is clicked -->
+  <div class="page-bg"></div>
 
   <!-- Header -->
   <header class="header">
@@ -22,42 +25,68 @@
       <button class="btn btn-filled" id="btn-memories" aria-haspopup="dialog">
         Send your memories today!
       </button>
-      <button class="btn btn-outline">Dunes don't lie baby!</button>
+      <button class="btn btn-outline" id="btn-dunes">tune in to the stream</button>
     </nav>
   </header>
 
-  <!-- Tagline -->
-  <p class="tagline">— we have lots to tell</p>
+  <!-- Tagline — dash is fixed; text is filled by typewriter JS -->
+  <p class="tagline"><span class="tagline-dash">— </span><span class="tagline-text"></span><span class="tagline-cursor"></span></p>
 
   <!-- Illustrations — drop from top, wiggle on land -->
   <div class="illustrations">
 
     <div class="illus"
-         style="--size:19vw; --rot-start:-6deg; --rot-end:-3deg; --delay:0s;    --duration:2.6s;">
+         style="--size:19vw; --rot-start:-6deg; --rot-end:-3deg; --delay:0s;    --duration:2.6s; --y-rest:-10vh;">
       <img src="drawings/Asset 7.svg" alt="illustration 1" />
     </div>
 
-    <div class="illus"
-         style="--size:17vw; --rot-start:4deg;  --rot-end:3deg;  --delay:0.3s;  --duration:2.5s;">
+    <div class="illus illus-spiral" id="spiral-illus"
+         style="--size:17vw; --rot-start:4deg;  --rot-end:3deg;  --delay:0.3s;  --duration:2.5s; --y-rest:-3vh;">
       <img src="drawings/Asset 8.svg" alt="illustration 2" />
     </div>
 
     <div class="illus"
-         style="--size:12vw; --rot-start:-3deg; --rot-end:1deg;  --delay:0.55s; --duration:2.4s;">
+         style="--size:12vw; --rot-start:-3deg; --rot-end:1deg;  --delay:0.55s; --duration:2.4s; --y-rest:-16vh;">
       <img src="drawings/Asset 11.svg" alt="illustration 3" />
     </div>
 
     <div class="illus"
-         style="--size:22vw; --rot-start:5deg;  --rot-end:2deg;  --delay:0.2s;  --duration:2.7s;">
-      <img src="drawings/Asset 10.svg" alt="illustration 4" />
+         style="--size:22vw; --rot-start:5deg;  --rot-end:2deg;  --delay:0.2s;  --duration:2.7s; --y-rest:0px;">
+      <img src="drawings/Asset 14.svg" alt="illustration 4" />
     </div>
 
     <div class="illus"
-         style="--size:16vw; --rot-start:-4deg; --rot-end:-2deg; --delay:0.4s;  --duration:2.5s;">
+         style="--size:16vw; --rot-start:-4deg; --rot-end:-2deg; --delay:0.4s;  --duration:2.5s; --y-rest:-7vh;">
       <img src="drawings/Asset 9.svg" alt="illustration 5" />
     </div>
 
   </div>
+
+  <!-- Spiral click panel: "sexy dunes" — INSIDE .page so it shares the same stacking context -->
+  <div id="spiral-panel">
+    <p class="spiral-title">sexy dunes</p>
+    <p class="spiral-body">
+      Research shows that<br>
+      dunes which look sexy<br>
+      have a 25% less chance<br>
+      of getting littered.
+    </p>
+    <p class="spiral-bold">We got you covered.</p>
+  </div>
+
+  <!-- Spiral floating CTA button -->
+  <button id="spiral-cta" aria-haspopup="dialog">
+    <span class="cta-pill-text">Send your memories today!</span>
+    <img src="drawings/Asset 16.svg" class="cta-wave" alt="" aria-hidden="true" />
+  </button>
+
+  <!-- Disclaimer — bottom right, appears with spiral click -->
+  <p class="page-disclaimer">
+    <strong>Disclaimer:</strong> Terms and conditions apply.
+    The numbers stated are all predictions based on data
+    from the She Tells Research Centre. Check the terms
+    and conditions on our website.
+  </p>
 
 </div>
 
@@ -101,6 +130,152 @@
       document.querySelectorAll('.overlay.active').forEach(el => closeOverlay(el.id));
   });
 
+  /* ── Typewriter ── */
+  const phrases = [
+    "I have… lots to tell you.., honey.",
+    "While you are waiting, we have lots to tell.",
+    "Yeah, I have things to tell.",
+    "We have lots to tell.",
+    "We have things to tell, honey.",
+    "We are telling you so you better listen, honey.",
+    "Baby! We have things to tell.",
+    "Do tell, tell we shell?",
+    "stay salty"
+  ];
+
+  const taglineText = document.querySelector('.tagline-text');
+  let phraseIdx  = 0;
+  let charIdx    = 0;
+  let deleting   = false;
+
+  function typeStep() {
+    const phrase = phrases[phraseIdx];
+
+    if (!deleting) {
+      charIdx++;
+      taglineText.textContent = phrase.slice(0, charIdx);
+      if (charIdx === phrase.length) {
+        deleting = true;
+        setTimeout(typeStep, 2200);
+        return;
+      }
+      const ch = phrase[charIdx - 1];
+      const speed = (ch === '.' || ch === ',' || ch === '…') ? 180 : 62;
+      setTimeout(typeStep, speed);
+    } else {
+      charIdx--;
+      taglineText.textContent = phrase.slice(0, charIdx);
+      if (charIdx === 0) {
+        deleting = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        setTimeout(typeStep, 420);
+        return;
+      }
+      setTimeout(typeStep, 28);
+    }
+  }
+
+  /* ── Spiral click interaction ── */
+  const spiralIllus  = document.getElementById('spiral-illus');
+  const spiralPanel  = document.getElementById('spiral-panel');
+  const spiralCta    = document.getElementById('spiral-cta');
+  const disclaimer   = document.querySelector('.page-disclaimer');
+  let   spiralOpen   = false;
+
+  function positionSpiralContent() {
+    // Place panel left of the spiral, CTA button above it
+    const rect = spiralIllus.getBoundingClientRect();
+    const cx   = rect.left + rect.width / 2;   // spiral centre x
+    const cy   = rect.top  + rect.height / 2;  // spiral centre y
+
+    // Panel: to the left, centred vertically on spiral
+    spiralPanel.style.left  = Math.max(16, cx - rect.width * 1.9) + 'px';
+    spiralPanel.style.top   = (cy - rect.height * 0.3) + 'px';
+    spiralPanel.style.transform = 'none';
+
+    // CTA button: above the spiral, slightly right of its centre
+    const ctaW = spiralCta.offsetWidth;
+    spiralCta.style.left  = (cx - ctaW / 2 + rect.width * 0.4) + 'px';
+    spiralCta.style.top   = (rect.top - 60) + 'px';
+    spiralCta.style.right = 'auto';
+  }
+
+  const pageEl   = document.querySelector('.page');
+  const btnDunes = document.getElementById('btn-dunes');
+
+  function openSpiral() {
+    spiralOpen = true;
+    positionSpiralContent();
+    spiralPanel.classList.add('active');
+    spiralCta.classList.add('active');
+    disclaimer.classList.add('active');
+    pageEl.classList.add('spiral-open');
+    btnDunes.textContent = 'Dunes don\'t lie baby!';
+  }
+
+  function closeSpiral() {
+    spiralOpen = false;
+    spiralPanel.classList.remove('active');
+    spiralCta.classList.remove('active');
+    disclaimer.classList.remove('active');
+    pageEl.classList.remove('spiral-open');
+    btnDunes.textContent = 'tune in to the stream';
+  }
+
+  spiralIllus.addEventListener('click', e => {
+    e.stopPropagation();
+    spiralOpen ? closeSpiral() : openSpiral();
+  });
+
+  // CTA button opens the memories overlay
+  spiralCta.addEventListener('click', e => {
+    e.stopPropagation();
+    openOverlay('overlay-memories');
+  });
+
+  // Click anywhere else on the page closes the panel
+  document.addEventListener('click', () => { if (spiralOpen) closeSpiral(); });
+
+  /* ── Align tagline: left edge flush with ? button, floated below header ── */
+  function positionTagline() {
+    const btn     = document.getElementById('btn-info');
+    const tagline = document.querySelector('.tagline');
+    const btnRect = btn.getBoundingClientRect();
+
+    // Left edge of tagline = left edge of the ? button
+    tagline.style.left = btnRect.left + 'px';
+    tagline.style.right = 'auto';
+
+    // Vertical: header bottom + ~18% of viewport height — sits below header
+    // but well above the illustrations (not right under the button)
+    tagline.style.top = (btnRect.bottom + window.innerHeight * 0.14) + 'px';
+  }
+
+  /* ── Mobile: zero out --y-rest so translateY(0) = CSS top position ── */
+  function applyMobileLayout() {
+    const isMobile = window.innerWidth <= 768;
+    document.querySelectorAll('.illus').forEach(el => {
+      if (isMobile) {
+        el.style.setProperty('--y-rest', '0px');
+      } else {
+        // restore original values from data attributes (set once on first run)
+        const orig = el.dataset.yrest;
+        if (orig) el.style.setProperty('--y-rest', orig);
+      }
+    });
+  }
+
+  // Store originals before mutating
+  document.querySelectorAll('.illus').forEach(el => {
+    el.dataset.yrest = el.style.getPropertyValue('--y-rest') || '0px';
+  });
+
+  applyMobileLayout();
+  window.addEventListener('resize', applyMobileLayout);
+
+  positionTagline();
+  window.addEventListener('resize', positionTagline);
+
   /* ── Trigger drop animation after fonts + images are ready ── */
   async function kickAnimations() {
     await document.fonts.ready;
@@ -115,6 +290,10 @@
     requestAnimationFrame(() => requestAnimationFrame(() => {
       document.querySelectorAll('.illus').forEach(el => el.classList.add('animate'));
     }));
+
+    // Start typewriter after the last illustration finishes landing
+    // max(delay + duration) across all 5 illus = 0.55 + 2.4 = 2.95 s
+    setTimeout(typeStep, 2950 + 350);
   }
 
   kickAnimations();

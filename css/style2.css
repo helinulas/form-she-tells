@@ -7,6 +7,12 @@
 
 @font-face {
   font-family: 'NaNTresor';
+  src: url('../Fonts/NaNTresor/ttf/NaNTresorM-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: 'NaNTresor';
   src: url('../Fonts/NaNTresor/ttf/NaNTresorM-Regular.ttf') format('truetype');
   font-weight: 400;
 }
@@ -20,14 +26,15 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --black: #111111;
-  --white: #ffffff;
+  --black:  #111111;
+  --white:  #ffffff;
+  --brown:  #5B2915;   /* brand accent — buttons, underlines */
 }
 
 html, body {
   width: 100%;
   height: 100%;
-  overflow: hidden;       /* prevents any scrollbar from animation travel */
+  overflow: hidden;
   background: var(--white);
 }
 
@@ -39,12 +46,28 @@ html, body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: var(--white);
 }
+
+/* Background image on an explicit layer — hidden by default,
+   fades in when .spiral-open is added to .page */
+.page-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: url('../Background/Asset 15-100.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  pointer-events: none;
+}
+.spiral-open .page-bg { opacity: 1; }
 
 /* ── Header — 1rem (16px) from each corner ── */
 .header {
   position: relative;
-  z-index: 10;
+  z-index: 12;   /* above ::before bg layer (z-index:1) */
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -58,14 +81,27 @@ html, body {
   gap: 1.2rem;
 }
 
+/* ── Colour shifts when spiral panel is open ── */
+
+/* All text/UI that needs to flip dark→white on spiral open */
+.brand-title,
+.brand-sub,
+.tagline,
+.tagline-cursor,
+.btn-circle,
+.btn-filled,
+.btn-outline { transition: color 0.35s, background 0.35s, border-color 0.35s; }
+
+/* ── Brand ── */
 .brand-title {
   font-family: 'NaNTresor', serif;
-  font-weight: 400;
+  font-weight: 200;          /* ExtraLight */
   font-size: clamp(52px, 7.5vw, 108px);
   line-height: 1;
   color: var(--black);
   letter-spacing: -0.02em;
 }
+.spiral-open .brand-title { color: var(--white); }
 
 .brand-sub {
   font-family: 'CeleScript', cursive;
@@ -75,13 +111,14 @@ html, body {
   text-transform: uppercase;
   white-space: nowrap;
 }
+.spiral-open .brand-sub { color: var(--white); }
 
 /* ── Nav buttons ── */
 .nav-buttons {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding-bottom: 0.3rem;
+  align-self: flex-start;   /* pins to top of header — same 1rem from top as brand */
 }
 
 .btn {
@@ -108,17 +145,26 @@ html, body {
   align-items: center;
   justify-content: center;
 }
-
 .btn-circle:hover { background: var(--black); color: var(--white); }
+.spiral-open .btn-circle {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.12);
+  color: var(--white);
+}
+.spiral-open .btn-circle:hover { background: var(--white); color: var(--black); }
 
 .btn-filled {
   background: var(--black);
   color: var(--white);
   padding: 0.55rem 1.4rem;
   border-radius: 2rem;
+  border: none;
 }
-
 .btn-filled:hover { background: #333; }
+.spiral-open .btn-filled {
+  background: var(--brown);
+}
+.spiral-open .btn-filled:hover { background: #7a3620; }
 
 .btn-outline {
   background: transparent;
@@ -127,22 +173,195 @@ html, body {
   border-radius: 2rem;
   border: 1.5px solid var(--black);
 }
-
 .btn-outline:hover { background: var(--black); color: var(--white); }
+.spiral-open .btn-outline {
+  border-color: var(--white);
+  color: var(--white);
+  background: transparent;
+}
+.spiral-open .btn-outline:hover { background: var(--white); color: var(--black); }
 
-/* ── Tagline ── */
+/* ── Tagline — position set by JS to align with ? button ── */
 .tagline {
   position: absolute;
   z-index: 10;
-  top: 50%;
-  left: 50%;
-  transform: translate(-10%, -50%);
+  top: 28%;
+  right: 1rem;
   font-family: 'CeleScript', cursive;
-  font-size: clamp(16px, 2vw, 28px);
+  font-size: clamp(15px, 1.8vw, 26px);
   color: var(--black);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  line-height: 1.55;
+  width: clamp(200px, 28vw, 420px);
+  white-space: normal;
+  text-align: left;
+}
+.spiral-open .tagline {
+  color: var(--white);
+  z-index: 0;          /* drops below .page-bg (z-index:1) — hidden under the image */
+}
+
+.tagline-dash { display: inline; }
+.tagline-text { display: inline; }
+
+/* ── Typewriter cursor ── */
+.tagline-cursor {
+  display: inline-block;
+  width: 1.5px;
+  height: 0.85em;
+  background: var(--black);
+  margin-left: 1px;
+  vertical-align: -0.05em;
+  animation: cursor-blink 0.72s step-end infinite;
+}
+.spiral-open .tagline-cursor { background: var(--white); }
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Spiral illustration — clickable ── */
+.illus-spiral {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.illus-spiral img {
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.illus-spiral:hover img {
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.35));
+  opacity: 0.85;
+}
+
+/* ── Spiral click panel — "sexy dunes" card ── */
+#spiral-panel {
+  position: absolute;
+  z-index: 15;
+  /* JS will fine-tune; fallback: left-centre, mid page */
+  left: 18%;
+  top: 50%;
+  transform: translateY(-40%);
+  width: clamp(180px, 20vw, 280px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  transform-origin: left center;
+}
+
+#spiral-panel.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-40%) translateX(0);
+}
+
+.spiral-title {
+  font-family: 'NaNTresor', serif;
+  font-weight: 400;
+  font-size: clamp(22px, 2.8vw, 38px);
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.7rem;
+  line-height: 1.1;
+}
+
+.spiral-body {
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(10px, 1vw, 13px);
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  line-height: 1.7;
+  margin-bottom: 0.9rem;
+}
+
+.spiral-bold {
+  font-family: 'NaNTresor', serif;
+  font-weight: 700;
+  font-size: clamp(12px, 1.15vw, 16px);
+  color: var(--white);
+  text-decoration: underline;
+  text-decoration-color: var(--brown);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+/* ── Spiral floating CTA button ── */
+#spiral-cta {
+  position: absolute;
+  z-index: 15;
+  right: 20%;
+  top: 46%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease 0.12s;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+#spiral-cta.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* The pill label */
+.cta-pill-text {
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(11px, 1.2vw, 15px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--brown);
+  color: var(--white);
+  padding: 0.7rem 2rem;
+  border-radius: 2rem;
   white-space: nowrap;
+  display: block;
+  transition: background 0.18s;
+}
+
+#spiral-cta:hover .cta-pill-text { background: #7a3620; }
+
+/* The wave SVG that hangs below the pill */
+.cta-wave {
+  display: block;
+  width: 130%;
+  margin-top: -4px;   /* slightly overlap pill for connected feel */
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Page disclaimer — bottom right ── */
+.page-disclaimer {
+  position: absolute;
+  z-index: 15;
+  bottom: 1.4rem;
+  right: 1.6rem;
+  font-family: 'NaNTresor', serif;
+  font-size: clamp(8px, 0.75vw, 11px);
+  color: rgba(255,255,255,0.6);
+  max-width: 220px;
+  line-height: 1.55;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease 0.2s;
+}
+
+.page-disclaimer.active {
+  opacity: 1;
+}
+
+.page-disclaimer strong {
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
 }
 
 /* ── Illustrations — sit at page bottom, fall and stay there ── */
@@ -157,7 +376,8 @@ html, body {
   padding: 0 4vw 1vh;
   z-index: 5;
   pointer-events: none;
-  overflow: hidden;         /* clip any travel outside during animation */
+  /* no overflow:hidden here — page already clips; hidden here would crop
+     illustrations translated upward to their --y-rest positions */
 }
 
 .illus {
@@ -165,6 +385,8 @@ html, body {
   align-items: flex-end;
   transform: translateY(-110vh) rotate(var(--rot-start, 0deg));
   will-change: transform;
+  /* --y-rest: per-illus vertical offset from bottom (negative = raised up) */
+  transition: opacity 0.4s ease;
 }
 
 .illus img {
@@ -174,6 +396,19 @@ html, body {
   max-height: 56vh;
   object-fit: contain;
   transform-origin: bottom center;
+  transition: filter 0.4s ease;
+}
+
+/* ── Spiral state when panel is open ── */
+
+/* All other illustrations fade out */
+.spiral-open .illus:not(.illus-spiral) {
+  opacity: 0;
+}
+
+/* Spiral SVG flips to white */
+.spiral-open .illus-spiral img {
+  filter: invert(1) brightness(10);
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -187,28 +422,28 @@ html, body {
   }
   /* land */
   55% {
-    transform: translateY(0) scaleY(0.88) rotate(var(--rot-end, 2deg));
+    transform: translateY(var(--y-rest, 0px)) scaleY(0.88) rotate(var(--rot-end, 2deg));
     animation-timing-function: ease-out;
   }
   /* first bounce up */
   61% {
-    transform: translateY(-28px) scaleY(1.06)
+    transform: translateY(calc(var(--y-rest, 0px) - 28px)) scaleY(1.06)
                rotate(calc(var(--rot-end, 2deg) - 7deg));
   }
   /* back down */
   67% {
-    transform: translateY(0) scaleY(1)
+    transform: translateY(var(--y-rest, 0px)) scaleY(1)
                rotate(calc(var(--rot-end, 2deg) + 7deg));
   }
   /* small bounce */
-  71% { transform: translateY(-10px) rotate(calc(var(--rot-end, 2deg) - 3deg)); }
-  75% { transform: translateY(0)     rotate(calc(var(--rot-end, 2deg) + 3deg)); }
+  71% { transform: translateY(calc(var(--y-rest, 0px) - 10px)) rotate(calc(var(--rot-end, 2deg) - 3deg)); }
+  75% { transform: translateY(var(--y-rest, 0px))               rotate(calc(var(--rot-end, 2deg) + 3deg)); }
   /* wiggle settle */
-  80% { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) - 4deg)); }
-  86% { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) + 4deg)); }
-  91% { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) - 2deg)); }
-  96% { transform: translateY(0) rotate(calc(var(--rot-end, 2deg) + 1deg)); }
-  100% { transform: translateY(0) rotate(var(--rot-end, 2deg)); }
+  80% { transform: translateY(var(--y-rest, 0px)) rotate(calc(var(--rot-end, 2deg) - 4deg)); }
+  86% { transform: translateY(var(--y-rest, 0px)) rotate(calc(var(--rot-end, 2deg) + 4deg)); }
+  91% { transform: translateY(var(--y-rest, 0px)) rotate(calc(var(--rot-end, 2deg) - 2deg)); }
+  96% { transform: translateY(var(--y-rest, 0px)) rotate(calc(var(--rot-end, 2deg) + 1deg)); }
+  100% { transform: translateY(var(--y-rest, 0px)) rotate(var(--rot-end, 2deg)); }
 }
 
 .illus.animate {
@@ -275,4 +510,140 @@ html, body {
   font-family: 'CeleScript', cursive;
   font-size: 15pt;
   line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE  ≤ 768 px
+   Illustrations switch from a bottom flex-row to
+   absolute scatter across the full viewport height.
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Header ── */
+  .header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding: 0.75rem 0.75rem 0;
+  }
+
+  .brand { gap: 0.6rem; }
+
+  .brand-title { font-size: clamp(28px, 10vw, 52px); }
+
+  .brand-sub { font-size: clamp(9px, 2.5vw, 14px); }
+
+  .nav-buttons {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-self: flex-start;
+  }
+
+  .btn         { font-size: clamp(9px, 2.6vw, 13px); }
+  .btn-circle  { width: 2rem; height: 2rem; font-size: 0.85rem; }
+  .btn-filled,
+  .btn-outline { padding: 0.4rem 0.9rem; }
+
+  /* ── Tagline — floats in white space above the drawings ── */
+  .tagline {
+    width: calc(100vw - 1.5rem) !important;
+    left: 0.75rem !important;
+    top: 30% !important;      /* overrides JS inline style */
+    bottom: auto;
+    font-size: clamp(12px, 3.8vw, 18px);
+  }
+
+  /* ── Illustration container: full viewport, block layout ── */
+  .illustrations {
+    display: block;
+    padding: 0;
+    /* still position:absolute bottom:0 left:0 width:100% from base,
+       but height must stretch up to cover the full page */
+    top: 0;
+    height: 100%;
+  }
+
+  /* Each illus becomes absolutely placed inside the container */
+  .illus {
+    position: absolute;
+    display: block;
+    align-items: initial;
+  }
+
+  /* Reset inline --y-rest so translateY(0) = the CSS top position.
+     Specificity trick: set on the element directly via JS (see script),
+     but also set here as a fallback for browsers that respect it. */
+  .illus { --y-rest: 0px; }
+
+  /* ── Individual placement — spread across full page width & height ── */
+
+  /* ── All illustrations cluster toward the bottom 45% of the page ── */
+
+  /* 1: Asset 7 — left, no bleed */
+  .illustrations .illus:nth-child(1) {
+    top: 52%;
+    left: 2vw;
+  }
+  .illustrations .illus:nth-child(1) img { width: 38vw; max-height: none; }
+
+  /* 2: Spiral — centre */
+  .illus-spiral {
+    top: 58%;
+    left: 30vw;
+  }
+  .illus-spiral img { width: 36vw !important; max-height: none; }
+
+  /* 3: Asset 11 — pulled left and slightly higher */
+  .illustrations .illus:nth-child(3) {
+    top: 43%;
+    right: 12vw;
+    left: auto;
+  }
+  .illustrations .illus:nth-child(3) img { width: 18vw; max-height: none; }
+
+  /* 4: Asset 14 — lower and shifted right so it doesn't bleed left */
+  .illustrations .illus:nth-child(4) {
+    top: 76%;
+    left: 8vw;
+  }
+  .illustrations .illus:nth-child(4) img { width: 44vw; max-height: none; }
+
+  /* 5: Asset 9 — lower and pulled left */
+  .illustrations .illus:nth-child(5) {
+    top: 70%;
+    right: 14vw;
+    left: auto;
+  }
+  .illustrations .illus:nth-child(5) img { width: 26vw; max-height: none; }
+
+  /* ── Spiral click panel ── */
+  #spiral-panel {
+    left: 1rem !important;
+    top: 44% !important;
+    width: calc(100vw - 2rem);
+    transform: none !important;
+  }
+
+  /* ── Spiral CTA button — horizontally centred ── */
+  #spiral-cta {
+    left: 50% !important;
+    right: auto !important;
+    top: 36% !important;
+    transform: translateX(-50%);
+  }
+
+  /* ── Disclaimer ── */
+  .page-disclaimer {
+    bottom: 1rem;
+    right: auto;
+    left: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+
+  /* ── Overlay box ── */
+  .overlay-box {
+    padding: 2rem 1.6rem;
+  }
 }
