@@ -314,9 +314,13 @@ html, body {
   pointer-events: auto;
 }
 
-/* Spiral CTA — brown pill background on the text */
-#spiral-cta .cta-pill-text { background: var(--brown); }
-#spiral-cta:hover .cta-pill-text { background: #7a3620; }
+/* Spiral CTA — brown outlined pill */
+#spiral-cta .cta-pill-text {
+  background: transparent;
+  border: 1.5px solid var(--brown);
+  color: var(--brown);
+  border-radius: 2rem;
+}
 
 /* Spiral disclaimer — brown themed box */
 #spiral-disclaimer {
@@ -731,7 +735,7 @@ html, body {
 /* When shell open: hide only the outline nav button, keep memories button visible as green */
 .shell-open .btn-outline { opacity: 0; pointer-events: none; }
 
-/* ── Shell Cream top-right corner button ── */
+/* ── Shell Cream top-right corner button — green outlined ── */
 #shell-corner-btn {
   position: absolute;
   z-index: 15;
@@ -744,9 +748,9 @@ html, body {
   font-size: clamp(11px, 1.1vw, 14px);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: var(--green);     /* green filled */
-  color: var(--white);
-  border: none;
+  background: transparent;
+  color: var(--green);
+  border: 1.5px solid var(--green);
   padding: 0.55rem 1.4rem;
   border-radius: 2rem;
   cursor: pointer;
@@ -756,7 +760,7 @@ html, body {
   opacity: 1;
   pointer-events: auto;
 }
-#shell-corner-btn:hover { background: #004d22; }
+#shell-corner-btn:hover { background: rgba(0,101,46,0.15); }
 
 /* ── Shell Cream text panel ── */
 #shell-panel {
@@ -825,7 +829,13 @@ html, body {
   opacity: 1;
   pointer-events: auto;
 }
-/* Shell CTA uses same wave SVG as spiral — no background fill on pill text */
+/* Shell CTA — green outlined pill */
+#shell-cta .cta-pill-text {
+  background: transparent;
+  border: 1.5px solid var(--green);
+  color: var(--green);
+  border-radius: 2rem;
+}
 
 /* Disclaimer gets a dark green box */
 #shell-disclaimer {
@@ -847,7 +857,8 @@ html, body {
 .illus-o2:hover img { filter: drop-shadow(0 0 10px rgba(243,236,7,0.5)); opacity: 0.85; }
 
 .o2-open .illus:not(.illus-o2) { opacity: 0; }
-.o2-open .illus-o2 img { filter: invert(1) brightness(10); }
+/* SVG is already white — no filter needed when open */
+.o2-open .illus-o2 img { filter: none; }
 
 /* UI colour flips */
 .o2-open .brand-title,
@@ -860,12 +871,11 @@ html, body {
 .o2-open .btn-filled:hover { background: #d4cc00; }
 .o2-open .btn-outline    { opacity: 0; pointer-events: none; }
 
-/* O₂ CTA — yellow outlined pill text (no fill) */
+/* O₂ CTA — no pill, just white text floating over the wave SVG */
 #o2-cta .cta-pill-text {
   background: transparent;
-  border: 1.5px solid var(--yellow);
-  color: var(--yellow);
-  border-radius: 2rem;
+  border: none;
+  color: var(--white);
 }
 
 /* Corner button — yellow outline, no fill */
@@ -907,7 +917,7 @@ html, body {
 .o2-body {
   font-family: 'CeleScript', cursive;
   font-size: clamp(10px, 1vw, 13px);
-  color: var(--black);
+  color: var(--white);
   letter-spacing: 0.14em; text-transform: uppercase;
   line-height: 1.4; margin-bottom: 0.9rem;
 }
@@ -915,17 +925,17 @@ html, body {
 .o2-bold {
   font-family: 'NaNTresor', serif; font-weight: 700;
   font-size: clamp(12px, 1.15vw, 16px);
-  color: var(--black);
+  color: var(--white);
   text-decoration: underline;
   text-decoration-color: var(--yellow);
   text-underline-offset: 4px; text-decoration-thickness: 3px;
 }
 
-/* O₂ disclaimer — dark yellow-tinted box */
+/* O₂ disclaimer — far left, no background */
 #o2-disclaimer {
-  background: rgba(120, 116, 0, 0.82);
-  padding: 0.75rem 1rem; border-radius: 0.5rem;
-  backdrop-filter: blur(4px);
+  background: transparent;
+  left: 1.6rem;
+  right: auto;
   color: rgba(255,255,255,0.75);
 }
 #o2-disclaimer strong { color: rgba(255,255,255,0.95); }
@@ -964,9 +974,15 @@ html, body {
 .sargassum-open .btn-filled:hover { background: #4aaa18; }
 .sargassum-open .btn-outline    { opacity: 0; pointer-events: none; }
 
-/* Sargassum CTA — no fill, wave SVG shape speaks for itself */
+/* Sargassum CTA — sargassum outlined pill */
+#sargassum-cta .cta-pill-text {
+  background: transparent;
+  border: 1.5px solid var(--sargassum);
+  color: var(--sargassum);
+  border-radius: 2rem;
+}
 
-/* Corner button — filled sargassum green */
+/* Corner button — sargassum outlined */
 #sargassum-corner-btn {
   position: absolute; z-index: 15; top: 1rem; right: 1rem;
   opacity: 0; pointer-events: none;
@@ -974,12 +990,12 @@ html, body {
   font-family: 'CeleScript', cursive;
   font-size: clamp(11px, 1.1vw, 14px);
   letter-spacing: 0.08em; text-transform: uppercase;
-  background: var(--sargassum); color: var(--white);
-  border: none; padding: 0.55rem 1.4rem; border-radius: 2rem;
+  background: transparent; color: var(--sargassum);
+  border: 1.5px solid var(--sargassum); padding: 0.55rem 1.4rem; border-radius: 2rem;
   cursor: pointer; white-space: nowrap;
 }
 #sargassum-corner-btn.active { opacity: 1; pointer-events: auto; }
-#sargassum-corner-btn:hover  { background: #4aaa18; }
+#sargassum-corner-btn:hover  { background: rgba(95,200,33,0.15); }
 
 /* Panel */
 #sargassum-panel {
@@ -1076,11 +1092,15 @@ html, body {
 .acid-open .btn-filled:hover { background: #a8327e; }
 .acid-open .btn-outline    { opacity: 0; pointer-events: none; }
 
-/* Acid CTA — pink filled pill */
-#acid-cta .cta-pill-text { background: var(--pink); }
-#acid-cta:hover .cta-pill-text { background: #a8327e; }
+/* Acid CTA — pink outlined pill */
+#acid-cta .cta-pill-text {
+  background: transparent;
+  border: 1.5px solid var(--pink);
+  color: var(--pink);
+  border-radius: 2rem;
+}
 
-/* Corner button — pink filled */
+/* Corner button — pink outlined */
 #acid-corner-btn {
   position: absolute; z-index: 15; top: 1rem; right: 1rem;
   opacity: 0; pointer-events: none;
@@ -1088,12 +1108,12 @@ html, body {
   font-family: 'CeleScript', cursive;
   font-size: clamp(11px, 1.1vw, 14px);
   letter-spacing: 0.08em; text-transform: uppercase;
-  background: var(--pink); color: var(--white);
-  border: none; padding: 0.55rem 1.4rem; border-radius: 2rem;
+  background: transparent; color: var(--pink);
+  border: 1.5px solid var(--pink); padding: 0.55rem 1.4rem; border-radius: 2rem;
   cursor: pointer; white-space: nowrap;
 }
 #acid-corner-btn.active { opacity: 1; pointer-events: auto; }
-#acid-corner-btn:hover  { background: #a8327e; }
+#acid-corner-btn:hover  { background: rgba(208,66,156,0.15); }
 
 /* Panel */
 #acid-panel {

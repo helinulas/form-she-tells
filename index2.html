@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>She Tells — Sea Shells</title>
-  <link rel="stylesheet" href="css/style2.css?v=21" />
+  <link rel="stylesheet" href="css/style2.css?v=22" />
 </head>
 <body>
 
@@ -409,9 +409,10 @@
     o2Panel.style.left      = Math.max(16, cx - rect.width * 1.8 - panelW * 0.3) + 'px';
     o2Panel.style.top       = (cy - rect.height * 0.3) + 'px';
     o2Panel.style.transform = 'none';
-    // CTA: above the illustration
+    // CTA: above the illustration — clamp left so it never overflows the viewport
     const ctaW = o2Cta.offsetWidth;
-    o2Cta.style.left  = (cx - ctaW / 2) + 'px';
+    const ctaLeft = Math.min(cx - ctaW / 2, window.innerWidth - ctaW - 16);
+    o2Cta.style.left  = Math.max(16, ctaLeft) + 'px';
     o2Cta.style.top   = (rect.top - 60) + 'px';
     o2Cta.style.right = 'auto';
   }
