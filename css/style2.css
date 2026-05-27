@@ -739,7 +739,6 @@ html, body {
   z-index: 15;
   top: 1rem;
   right: 1rem;
-  /* sits alongside the existing nav buttons — they shift left via shell-open */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.45s ease 0.1s;
@@ -747,10 +746,10 @@ html, body {
   font-size: clamp(11px, 1.1vw, 14px);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: transparent;
+  background: var(--green);     /* green filled */
   color: var(--white);
-  border: 1.5px solid var(--white);
-  padding: 0.5rem 1.2rem;
+  border: none;
+  padding: 0.55rem 1.4rem;
   border-radius: 2rem;
   cursor: pointer;
   white-space: nowrap;
@@ -759,7 +758,7 @@ html, body {
   opacity: 1;
   pointer-events: auto;
 }
-#shell-corner-btn:hover { background: rgba(255,255,255,0.15); }
+#shell-corner-btn:hover { background: #004d22; }
 
 /* ── Shell Cream text panel ── */
 #shell-panel {
@@ -782,11 +781,12 @@ html, body {
 .shell-title {
   font-family: 'NaNTresor', serif;
   font-weight: 400;
-  font-size: clamp(28px, 3.8vw, 52px);
+  font-size: clamp(22px, 2.8vw, 38px);
   color: var(--white);
   letter-spacing: -0.02em;
   line-height: 1;
   margin-bottom: 0.8rem;
+  white-space: nowrap;          /* never wraps */
 }
 
 .shell-body {
@@ -827,11 +827,7 @@ html, body {
   opacity: 1;
   pointer-events: auto;
 }
-/* Override pill text to use green background instead of brown */
-#shell-cta .cta-pill-text {
-  background: var(--green);
-}
-#shell-cta:hover .cta-pill-text { background: #004d22; }
+/* Shell CTA uses same wave SVG as spiral — no background fill on pill text */
 
 /* Disclaimer gets a dark green box */
 #shell-disclaimer {

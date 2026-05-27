@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>She Tells — Sea Shells</title>
-  <link rel="stylesheet" href="css/style2.css?v=17" />
+  <link rel="stylesheet" href="css/style2.css?v=18" />
 </head>
 <body>
 
@@ -282,10 +282,10 @@
     shellPanel.style.top   = (cy - rect.height * 0.3) + 'px';
     shellPanel.style.transform = 'none';
 
-    // CTA: horizontally centred on page, vertically above mid-point
+    // CTA: right above the shell illustration, centred on it (mirrors spiral)
     const ctaW = shellCta.offsetWidth;
-    shellCta.style.left  = (window.innerWidth / 2 - ctaW / 2) + 'px';
-    shellCta.style.top   = (window.innerHeight * 0.38) + 'px';
+    shellCta.style.left  = (cx - ctaW / 2 + rect.width * 0.1) + 'px';
+    shellCta.style.top   = (rect.top - 60) + 'px';
     shellCta.style.right = 'auto';
   }
 
