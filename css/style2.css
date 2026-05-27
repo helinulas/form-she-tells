@@ -600,42 +600,42 @@ html, body {
 
   /* ── All illustrations cluster toward the bottom 45% of the page ── */
 
-  /* 1: Asset 7 — left, pushed down to clear ad text panel */
+  /* 1: Asset 7 — left */
   .illustrations .illus:nth-child(1) {
-    top: 68%;
+    top: 58%;
     left: 2vw;
   }
-  .illustrations .illus:nth-child(1) img { width: 38vw; max-height: none; }
+  .illustrations .illus:nth-child(1) img { width: 32vw; max-height: none; }
 
   /* 2: Spiral — centre */
   .illus-spiral {
-    top: 58%;
-    left: 30vw;
+    top: 50%;
+    left: 28vw;
   }
-  .illus-spiral img { width: 36vw !important; max-height: none; }
+  .illus-spiral img { width: 30vw !important; max-height: none; }
 
-  /* 3: Asset 11 — pulled left and slightly higher */
+  /* 3: Asset 11 — upper right */
   .illustrations .illus:nth-child(3) {
-    top: 43%;
-    right: 12vw;
+    top: 36%;
+    right: 10vw;
     left: auto;
   }
-  .illustrations .illus:nth-child(3) img { width: 18vw; max-height: none; }
+  .illustrations .illus:nth-child(3) img { width: 16vw; max-height: none; }
 
-  /* 4: Asset 14 — lower and shifted right so it doesn't bleed left */
+  /* 4: Asset 14 — lower left */
   .illustrations .illus:nth-child(4) {
-    top: 76%;
-    left: 8vw;
+    top: 66%;
+    left: 6vw;
   }
-  .illustrations .illus:nth-child(4) img { width: 44vw; max-height: none; }
+  .illustrations .illus:nth-child(4) img { width: 38vw; max-height: none; }
 
-  /* 5: Asset 9 — lower and pulled left */
+  /* 5: Asset 9 — lower right */
   .illustrations .illus:nth-child(5) {
-    top: 70%;
-    right: 14vw;
+    top: 60%;
+    right: 10vw;
     left: auto;
   }
-  .illustrations .illus:nth-child(5) img { width: 26vw; max-height: none; }
+  .illustrations .illus:nth-child(5) img { width: 22vw; max-height: none; }
 
   /* ── Spiral click panel ── */
   #spiral-panel {
@@ -860,8 +860,8 @@ html, body {
 .illus-o2:hover img { filter: drop-shadow(0 0 10px rgba(243,236,7,0.5)); opacity: 0.85; }
 
 .o2-open .illus:not(.illus-o2) { opacity: 0; }
-/* SVG is already white — no filter needed when open */
-.o2-open .illus-o2 img { filter: none; }
+/* Turn yellow SVG fully white against the blue background when open */
+.o2-open .illus-o2 img { filter: brightness(0) invert(1); }
 
 /* UI colour flips */
 .o2-open .brand-title,

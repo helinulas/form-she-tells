@@ -3,7 +3,7 @@
   <defs>
     <style>
       .cls-1 {
-        stroke: #ffffff;
+        stroke: #f3ca0c;
         stroke-linecap: round;
         stroke-linejoin: round;
         stroke-width: 1.83px;
@@ -22,7 +22,7 @@
       }
 
       .cls-4 {
-        fill: #ffffff;
+        fill: #f3ca0c;
       }
     </style>
     <clipPath id="clippath">
