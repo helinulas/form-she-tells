@@ -318,6 +318,7 @@ html, body {
 #spiral-cta .cta-pill-text {
   background: transparent;
   border: none;
+  border-radius: 0;
   color: var(--white);
 }
 
@@ -832,6 +833,7 @@ html, body {
 #shell-cta .cta-pill-text {
   background: transparent;
   border: none;
+  border-radius: 0;
   color: var(--white);
 }
 
@@ -873,6 +875,7 @@ html, body {
 #o2-cta .cta-pill-text {
   background: transparent;
   border: none;
+  border-radius: 0;
   color: var(--white);
 }
 
@@ -976,6 +979,7 @@ html, body {
 #sargassum-cta .cta-pill-text {
   background: transparent;
   border: none;
+  border-radius: 0;
   color: var(--white);
 }
 
@@ -1093,6 +1097,7 @@ html, body {
 #acid-cta .cta-pill-text {
   background: transparent;
   border: none;
+  border-radius: 0;
   color: var(--white);
 }
 
