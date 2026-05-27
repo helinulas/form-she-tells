@@ -314,12 +314,11 @@ html, body {
   pointer-events: auto;
 }
 
-/* Spiral CTA — brown outlined pill */
+/* Spiral CTA — no pill, white text over wave SVG */
 #spiral-cta .cta-pill-text {
   background: transparent;
-  border: 1.5px solid var(--brown);
-  color: var(--brown);
-  border-radius: 2rem;
+  border: none;
+  color: var(--white);
 }
 
 /* Spiral disclaimer — brown themed box */
@@ -735,7 +734,7 @@ html, body {
 /* When shell open: hide only the outline nav button, keep memories button visible as green */
 .shell-open .btn-outline { opacity: 0; pointer-events: none; }
 
-/* ── Shell Cream top-right corner button — green outlined ── */
+/* ── Shell Cream top-right corner button — green outlined, white text ── */
 #shell-corner-btn {
   position: absolute;
   z-index: 15;
@@ -745,11 +744,11 @@ html, body {
   pointer-events: none;
   transition: opacity 0.45s ease 0.1s;
   font-family: 'CeleScript', cursive;
-  font-size: clamp(11px, 1.1vw, 14px);
-  letter-spacing: 0.08em;
+  font-size: clamp(11px, 1.1vw, 16px);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   background: transparent;
-  color: var(--green);
+  color: var(--white);
   border: 1.5px solid var(--green);
   padding: 0.55rem 1.4rem;
   border-radius: 2rem;
@@ -760,7 +759,7 @@ html, body {
   opacity: 1;
   pointer-events: auto;
 }
-#shell-corner-btn:hover { background: rgba(0,101,46,0.15); }
+#shell-corner-btn:hover { background: rgba(0,101,46,0.2); }
 
 /* ── Shell Cream text panel ── */
 #shell-panel {
@@ -829,12 +828,11 @@ html, body {
   opacity: 1;
   pointer-events: auto;
 }
-/* Shell CTA — green outlined pill */
+/* Shell CTA — no pill, white text over wave SVG */
 #shell-cta .cta-pill-text {
   background: transparent;
-  border: 1.5px solid var(--green);
-  color: var(--green);
-  border-radius: 2rem;
+  border: none;
+  color: var(--white);
 }
 
 /* Disclaimer gets a dark green box */
@@ -878,16 +876,16 @@ html, body {
   color: var(--white);
 }
 
-/* Corner button — yellow outline, no fill */
+/* Corner button — yellow outlined, white text */
 #o2-corner-btn {
   position: absolute; z-index: 15; top: 1rem; right: 1rem;
   opacity: 0; pointer-events: none;
   transition: opacity 0.45s ease 0.1s;
   font-family: 'CeleScript', cursive;
-  font-size: clamp(11px, 1.1vw, 14px);
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: clamp(11px, 1.1vw, 16px);
+  letter-spacing: 0.04em; text-transform: uppercase;
   background: transparent;
-  color: var(--yellow);
+  color: var(--white);
   border: 1.5px solid var(--yellow);
   padding: 0.55rem 1.4rem; border-radius: 2rem;
   cursor: pointer; white-space: nowrap;
@@ -974,23 +972,22 @@ html, body {
 .sargassum-open .btn-filled:hover { background: #4aaa18; }
 .sargassum-open .btn-outline    { opacity: 0; pointer-events: none; }
 
-/* Sargassum CTA — sargassum outlined pill */
+/* Sargassum CTA — no pill, white text over wave SVG */
 #sargassum-cta .cta-pill-text {
   background: transparent;
-  border: 1.5px solid var(--sargassum);
-  color: var(--sargassum);
-  border-radius: 2rem;
+  border: none;
+  color: var(--white);
 }
 
-/* Corner button — sargassum outlined */
+/* Corner button — sargassum outlined, white text */
 #sargassum-corner-btn {
   position: absolute; z-index: 15; top: 1rem; right: 1rem;
   opacity: 0; pointer-events: none;
   transition: opacity 0.45s ease 0.1s;
   font-family: 'CeleScript', cursive;
-  font-size: clamp(11px, 1.1vw, 14px);
-  letter-spacing: 0.08em; text-transform: uppercase;
-  background: transparent; color: var(--sargassum);
+  font-size: clamp(11px, 1.1vw, 16px);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  background: transparent; color: var(--white);
   border: 1.5px solid var(--sargassum); padding: 0.55rem 1.4rem; border-radius: 2rem;
   cursor: pointer; white-space: nowrap;
 }
@@ -1092,23 +1089,22 @@ html, body {
 .acid-open .btn-filled:hover { background: #a8327e; }
 .acid-open .btn-outline    { opacity: 0; pointer-events: none; }
 
-/* Acid CTA — pink outlined pill */
+/* Acid CTA — no pill, white text over wave SVG */
 #acid-cta .cta-pill-text {
   background: transparent;
-  border: 1.5px solid var(--pink);
-  color: var(--pink);
-  border-radius: 2rem;
+  border: none;
+  color: var(--white);
 }
 
-/* Corner button — pink outlined */
+/* Corner button — pink outlined, white text */
 #acid-corner-btn {
   position: absolute; z-index: 15; top: 1rem; right: 1rem;
   opacity: 0; pointer-events: none;
   transition: opacity 0.45s ease 0.1s;
   font-family: 'CeleScript', cursive;
-  font-size: clamp(11px, 1.1vw, 14px);
-  letter-spacing: 0.08em; text-transform: uppercase;
-  background: transparent; color: var(--pink);
+  font-size: clamp(11px, 1.1vw, 16px);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  background: transparent; color: var(--white);
   border: 1.5px solid var(--pink); padding: 0.55rem 1.4rem; border-radius: 2rem;
   cursor: pointer; white-space: nowrap;
 }

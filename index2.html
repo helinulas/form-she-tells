@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>She Tells — Sea Shells</title>
-  <link rel="stylesheet" href="css/style2.css?v=22" />
+  <link rel="stylesheet" href="css/style2.css?v=23" />
 </head>
 <body>
 
@@ -389,7 +389,7 @@
 
   shellCornerBtn.addEventListener('click', e => {
     e.stopPropagation();
-    openOverlay('overlay-memories');
+    closeShell();
   });
 
   /* ── O₂ (Asset 9) ── */
@@ -442,7 +442,7 @@
 
   o2Illus.addEventListener('click', e => { e.stopPropagation(); o2Open ? closeO2() : openO2(); });
   o2Cta.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
-  o2CornerBtn.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
+  o2CornerBtn.addEventListener('click', e => { e.stopPropagation(); closeO2(); });
 
   /* ── Sargassum City (Asset 14) ── */
   const sargassumIllus      = document.getElementById('sargassum-illus');
@@ -492,7 +492,7 @@
 
   sargassumIllus.addEventListener('click', e => { e.stopPropagation(); sargassumOpen ? closeSargassum() : openSargassum(); });
   sargassumCta.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
-  sargassumCornerBtn.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
+  sargassumCornerBtn.addEventListener('click', e => { e.stopPropagation(); closeSargassum(); });
 
   /* ── Acid Tabs (Asset 11) ── */
   const acidIllus      = document.getElementById('acid-illus');
@@ -543,7 +543,7 @@
 
   acidIllus.addEventListener('click', e => { e.stopPropagation(); acidOpen ? closeAcid() : openAcid(); });
   acidCta.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
-  acidCornerBtn.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
+  acidCornerBtn.addEventListener('click', e => { e.stopPropagation(); closeAcid(); });
 
   /* ── Align tagline: left edge flush with ? button, floated below header ── */
   function positionTagline() {
