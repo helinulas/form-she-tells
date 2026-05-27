@@ -63,11 +63,10 @@ html, body {
 }
 /* Each background layer uses a pseudo or separate bg declaration */
 .page-bg               { background-image: url('../Background/Asset 15-100.jpg'); }
-.spiral-open .page-bg  { opacity: 1; }
-.shell-open  .page-bg  {
-  background-image: url('../Background/Asset_7_BG.png');
-  opacity: 1;
-}
+.spiral-open    .page-bg { opacity: 1; }
+.shell-open     .page-bg { background-image: url('../Background/Asset_7_BG.png');  opacity: 1; }
+.o2-open        .page-bg { background-image: url('../Background/Asset_9_BG.png');  opacity: 1; }
+.sargassum-open .page-bg { background-image: url('../Background/Asset_14_BG.png'); opacity: 1; }
 
 /* ── Header — 1rem (16px) from each corner ── */
 .header {
@@ -837,3 +836,218 @@ html, body {
   backdrop-filter: blur(4px);
 }
 #shell-disclaimer strong { color: rgba(255,255,255,0.95); }
+
+/* ══════════════════════════════════════════════════════
+   DELUXE O₂ — Asset 9  |  #f3ec07 yellow, text black
+══════════════════════════════════════════════════════ */
+:root { --yellow: #f3ec07; }
+
+.illus-o2 { pointer-events: auto; cursor: pointer; }
+.illus-o2 img { transition: filter 0.3s ease, opacity 0.3s ease; }
+.illus-o2:hover img { filter: drop-shadow(0 0 10px rgba(243,236,7,0.5)); opacity: 0.85; }
+
+.o2-open .illus:not(.illus-o2) { opacity: 0; }
+.o2-open .illus-o2 img { filter: invert(1) brightness(10); }
+
+/* UI colour flips */
+.o2-open .brand-title,
+.o2-open .brand-sub      { color: var(--white); }
+.o2-open .tagline        { color: var(--white); z-index: 0; }
+.o2-open .tagline-cursor { background: var(--white); }
+.o2-open .btn-circle     { border-color: var(--yellow); color: var(--yellow); background: transparent; }
+.o2-open .btn-circle:hover { background: var(--yellow); color: var(--black); }
+.o2-open .btn-filled     { background: var(--yellow); color: var(--black); }
+.o2-open .btn-filled:hover { background: #d4cc00; }
+.o2-open .btn-outline    { opacity: 0; pointer-events: none; }
+
+/* O₂ CTA — yellow outlined pill text (no fill) */
+#o2-cta .cta-pill-text {
+  background: transparent;
+  border: 1.5px solid var(--yellow);
+  color: var(--yellow);
+  border-radius: 2rem;
+}
+
+/* Corner button — yellow outline, no fill */
+#o2-corner-btn {
+  position: absolute; z-index: 15; top: 1rem; right: 1rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease 0.1s;
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(11px, 1.1vw, 14px);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  background: transparent;
+  color: var(--yellow);
+  border: 1.5px solid var(--yellow);
+  padding: 0.55rem 1.4rem; border-radius: 2rem;
+  cursor: pointer; white-space: nowrap;
+}
+#o2-corner-btn.active { opacity: 1; pointer-events: auto; }
+#o2-corner-btn:hover  { background: rgba(243,236,7,0.15); }
+
+/* Panel */
+#o2-panel {
+  position: absolute; z-index: 15;
+  right: 55%; top: 50%; transform: translateY(-40%);
+  width: clamp(180px, 22vw, 300px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+#o2-panel.active { opacity: 1; pointer-events: auto; transform: translateY(-40%) translateX(0); }
+
+.o2-title {
+  font-family: 'NaNTresor', serif; font-weight: 400;
+  font-size: clamp(22px, 2.8vw, 38px);
+  color: var(--yellow);
+  letter-spacing: -0.01em; line-height: 1;
+  margin-bottom: 0.8rem; white-space: nowrap;
+}
+.o2-title sub { font-size: 0.6em; vertical-align: sub; }
+
+.o2-body {
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(10px, 1vw, 13px);
+  color: var(--black);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  line-height: 1.4; margin-bottom: 0.9rem;
+}
+
+.o2-bold {
+  font-family: 'NaNTresor', serif; font-weight: 700;
+  font-size: clamp(12px, 1.15vw, 16px);
+  color: var(--black);
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+  text-underline-offset: 4px; text-decoration-thickness: 3px;
+}
+
+/* O₂ disclaimer — dark yellow-tinted box */
+#o2-disclaimer {
+  background: rgba(120, 116, 0, 0.82);
+  padding: 0.75rem 1rem; border-radius: 0.5rem;
+  backdrop-filter: blur(4px);
+  color: rgba(255,255,255,0.75);
+}
+#o2-disclaimer strong { color: rgba(255,255,255,0.95); }
+
+/* O₂ CTA button */
+#o2-cta {
+  position: absolute; z-index: 15;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease 0.12s;
+  background: transparent; border: none; padding: 0; cursor: pointer;
+  width: clamp(200px, 26vw, 360px);
+}
+#o2-cta.active { opacity: 1; pointer-events: auto; }
+
+
+/* ══════════════════════════════════════════════════════
+   SARGASSUM CITY — Asset 14  |  #5fc821 green
+══════════════════════════════════════════════════════ */
+:root { --sargassum: #5fc821; }
+
+.illus-sargassum { pointer-events: auto; cursor: pointer; }
+.illus-sargassum img { transition: filter 0.3s ease, opacity 0.3s ease; }
+.illus-sargassum:hover img { filter: drop-shadow(0 0 10px rgba(95,200,33,0.4)); opacity: 0.85; }
+
+.sargassum-open .illus:not(.illus-sargassum) { opacity: 0; }
+.sargassum-open .illus-sargassum img { filter: invert(1) brightness(10); }
+
+/* UI colour flips */
+.sargassum-open .brand-title,
+.sargassum-open .brand-sub      { color: var(--white); }
+.sargassum-open .tagline        { color: var(--white); z-index: 0; }
+.sargassum-open .tagline-cursor { background: var(--white); }
+.sargassum-open .btn-circle     { border-color: var(--white); background: rgba(255,255,255,0.12); color: var(--white); }
+.sargassum-open .btn-circle:hover { background: var(--white); color: var(--black); }
+.sargassum-open .btn-filled     { background: var(--sargassum); color: var(--white); }
+.sargassum-open .btn-filled:hover { background: #4aaa18; }
+.sargassum-open .btn-outline    { opacity: 0; pointer-events: none; }
+
+/* Sargassum CTA pill */
+#sargassum-cta .cta-pill-text { background: var(--sargassum); }
+#sargassum-cta:hover .cta-pill-text { background: #4aaa18; }
+
+/* Corner button — filled sargassum green */
+#sargassum-corner-btn {
+  position: absolute; z-index: 15; top: 1rem; right: 1rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease 0.1s;
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(11px, 1.1vw, 14px);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--sargassum); color: var(--white);
+  border: none; padding: 0.55rem 1.4rem; border-radius: 2rem;
+  cursor: pointer; white-space: nowrap;
+}
+#sargassum-corner-btn.active { opacity: 1; pointer-events: auto; }
+#sargassum-corner-btn:hover  { background: #4aaa18; }
+
+/* Panel */
+#sargassum-panel {
+  position: absolute; z-index: 15;
+  right: 55%; top: 50%; transform: translateY(-40%);
+  width: clamp(180px, 22vw, 300px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+#sargassum-panel.active { opacity: 1; pointer-events: auto; transform: translateY(-40%) translateX(0); }
+
+.sargassum-title {
+  font-family: 'NaNTresor', serif; font-weight: 400;
+  font-size: clamp(22px, 2.8vw, 38px);
+  color: var(--white);
+  letter-spacing: -0.01em; line-height: 1;
+  margin-bottom: 0.8rem; white-space: nowrap;
+}
+
+.sargassum-body {
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(10px, 1vw, 13px);
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  line-height: 1.4; margin-bottom: 0.9rem;
+}
+
+.sargassum-bold {
+  font-family: 'NaNTresor', serif; font-weight: 700;
+  font-size: clamp(12px, 1.15vw, 16px);
+  color: var(--white);
+  text-decoration: underline;
+  text-decoration-color: var(--sargassum);
+  text-underline-offset: 4px; text-decoration-thickness: 3px;
+}
+
+/* Sargassum disclaimer box */
+#sargassum-disclaimer {
+  background: rgba(40, 90, 10, 0.82);
+  padding: 0.75rem 1rem; border-radius: 0.5rem;
+  backdrop-filter: blur(4px);
+  color: rgba(255,255,255,0.75);
+}
+#sargassum-disclaimer strong { color: rgba(255,255,255,0.95); }
+
+/* Sargassum CTA button */
+#sargassum-cta {
+  position: absolute; z-index: 15;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease 0.12s;
+  background: transparent; border: none; padding: 0; cursor: pointer;
+  width: clamp(200px, 26vw, 360px);
+}
+#sargassum-cta.active { opacity: 1; pointer-events: auto; }
+
+/* ── Mobile overrides for new panels ── */
+@media (max-width: 768px) {
+  #o2-panel, #sargassum-panel {
+    left: 1rem !important; top: 44% !important;
+    width: calc(100vw - 2rem); transform: none !important;
+  }
+  #o2-cta, #sargassum-cta {
+    left: 50% !important; right: auto !important;
+    top: 36% !important; transform: translateX(-50%);
+  }
+  #o2-corner-btn, #sargassum-corner-btn {
+    top: 0.75rem !important; right: 0.75rem !important;
+  }
+}
