@@ -679,9 +679,12 @@ html, body {
     top: 36% !important;
     transform: translateX(-50%);
   }
-  #shell-corner-btn {
-    top: 0.75rem !important;
-    right: 0.75rem !important;
+  /* Hide corner buttons on mobile — header layout matches spiral (no corner btn) */
+  #shell-corner-btn,
+  #o2-corner-btn,
+  #sargassum-corner-btn,
+  #acid-corner-btn {
+    display: none !important;
   }
 }
 
@@ -1062,9 +1065,7 @@ html, body {
     left: 50% !important; right: auto !important;
     top: 36% !important; transform: translateX(-50%);
   }
-  #o2-corner-btn, #sargassum-corner-btn {
-    top: 0.75rem !important; right: 0.75rem !important;
-  }
+  /* corner buttons hidden on mobile (see rule above) */
 }
 
 /* ══════════════════════════════════════════════════════
