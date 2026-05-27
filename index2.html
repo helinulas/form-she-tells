@@ -227,6 +227,7 @@
   const btnDunes = document.getElementById('btn-dunes');
 
   function openSpiral() {
+    if (shellOpen) closeShell();
     spiralOpen = true;
     positionSpiralContent();
     spiralPanel.classList.add('active');
