@@ -600,9 +600,9 @@ html, body {
 
   /* ── All illustrations cluster toward the bottom 45% of the page ── */
 
-  /* 1: Asset 7 — left, no bleed */
+  /* 1: Asset 7 — left, pushed down to clear ad text panel */
   .illustrations .illus:nth-child(1) {
-    top: 52%;
+    top: 68%;
     left: 2vw;
   }
   .illustrations .illus:nth-child(1) img { width: 38vw; max-height: none; }
