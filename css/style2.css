@@ -278,7 +278,7 @@ html, body {
   color: rgba(255,255,255,0.85);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  line-height: 1.7;
+  line-height: 1.4;           /* matches shell body */
   margin-bottom: 0.9rem;
 }
 
@@ -289,8 +289,8 @@ html, body {
   color: var(--white);
   text-decoration: underline;
   text-decoration-color: var(--brown);
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 3px; /* matches shell bold */
 }
 
 /* ── Spiral floating CTA button ── */
@@ -314,6 +314,19 @@ html, body {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* Spiral CTA — brown pill background on the text */
+#spiral-cta .cta-pill-text { background: var(--brown); }
+#spiral-cta:hover .cta-pill-text { background: #7a3620; }
+
+/* Spiral disclaimer — brown themed box */
+#spiral-disclaimer {
+  background: rgba(91, 41, 21, 0.82);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(4px);
+}
+#spiral-disclaimer strong { color: rgba(255,255,255,0.95); }
 
 /* SVG fills the button — acts as the shape/container */
 .cta-wave {
