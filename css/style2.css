@@ -729,8 +729,7 @@ html, body {
 }
 .shell-open .btn-outline:hover { background: var(--white); color: var(--black); }
 
-/* Hide the two nav buttons when shell is open — corner button takes their place */
-.shell-open .btn-filled,
+/* When shell open: hide only the outline nav button, keep memories button visible as green */
 .shell-open .btn-outline { opacity: 0; pointer-events: none; }
 
 /* ── Shell Cream top-right corner button ── */
