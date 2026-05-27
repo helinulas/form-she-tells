@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>She Tells — Sea Shells</title>
-  <link rel="stylesheet" href="css/style2.css?v=13" />
+  <link rel="stylesheet" href="css/style2.css?v=15" />
 </head>
 <body>
 
@@ -35,7 +35,7 @@
   <!-- Illustrations — drop from top, wiggle on land -->
   <div class="illustrations">
 
-    <div class="illus"
+    <div class="illus illus-shell" id="shell-illus"
          style="--size:19vw; --rot-start:-6deg; --rot-end:-3deg; --delay:0s;    --duration:2.6s; --y-rest:-10vh;">
       <img src="drawings/Asset 7.svg" alt="illustration 1" />
     </div>
@@ -81,11 +81,34 @@
   </button>
 
   <!-- Disclaimer — bottom right, appears with spiral click -->
-  <p class="page-disclaimer">
+  <p class="page-disclaimer" id="spiral-disclaimer">
     <strong>Disclaimer:</strong> Terms and conditions apply.
     The numbers stated are all predictions based on data
     from the She Tells Research Centre. Check the terms
     and conditions on our website.
+  </p>
+
+  <!-- Shell Cream top-right button -->
+  <button id="shell-corner-btn">Outlast the acid era...</button>
+
+  <!-- Shell Cream text panel -->
+  <div id="shell-panel">
+    <p class="shell-title">Shell<br>Cream</p>
+    <p class="shell-body">The ocean<br>doesn't care about<br>your insides</p>
+    <p class="shell-bold">But we do.</p>
+  </div>
+
+  <!-- Shell Cream floating CTA (wave SVG + text, same as spiral) -->
+  <button id="shell-cta" aria-haspopup="dialog">
+    <img src="drawings/Asset 16.svg" class="cta-wave" alt="" aria-hidden="true" />
+    <span class="cta-pill-text">Send your memories today!</span>
+  </button>
+
+  <!-- Shell Cream disclaimer -->
+  <p class="page-disclaimer" id="shell-disclaimer">
+    <strong>Disclaimer:</strong> She Tells Shell Cream is a cosmetic supplement and not
+    a solution to ocean acidification. Individual carbonate saturation levels
+    may vary. She Tells Corp assumes no liability for planetary pH.
   </p>
 
 </div>
@@ -179,7 +202,7 @@
   const spiralIllus  = document.getElementById('spiral-illus');
   const spiralPanel  = document.getElementById('spiral-panel');
   const spiralCta    = document.getElementById('spiral-cta');
-  const disclaimer   = document.querySelector('.page-disclaimer');
+  const disclaimer   = document.getElementById('spiral-disclaimer');
   let   spiralOpen   = false;
 
   function positionSpiralContent() {
@@ -234,7 +257,71 @@
   });
 
   // Click anywhere else on the page closes the panel
-  document.addEventListener('click', () => { if (spiralOpen) closeSpiral(); });
+  document.addEventListener('click', () => {
+    if (spiralOpen) closeSpiral();
+    if (shellOpen)  closeShell();
+  });
+
+  /* ── Shell Cream (Asset 7) click interaction ── */
+  const shellIllus      = document.getElementById('shell-illus');
+  const shellPanel      = document.getElementById('shell-panel');
+  const shellCta        = document.getElementById('shell-cta');
+  const shellDisclaimer = document.getElementById('shell-disclaimer');
+  const shellCornerBtn  = document.getElementById('shell-corner-btn');
+  let   shellOpen       = false;
+
+  function positionShellContent() {
+    const rect = shellIllus.getBoundingClientRect();
+    const cx   = rect.left + rect.width / 2;
+    const cy   = rect.top  + rect.height / 2;
+
+    // Panel: comfortably to the right of the illustration, not overlapping
+    const panelLeft = rect.right + rect.width * 0.3;
+    shellPanel.style.left  = Math.min(panelLeft, window.innerWidth * 0.38) + 'px';
+    shellPanel.style.top   = (cy - rect.height * 0.3) + 'px';
+    shellPanel.style.transform = 'none';
+
+    // CTA: above the illustration, centred on it
+    const ctaW = shellCta.offsetWidth;
+    shellCta.style.left  = (cx - ctaW / 2) + 'px';
+    shellCta.style.top   = (rect.top - 70) + 'px';
+    shellCta.style.right = 'auto';
+  }
+
+  function openShell() {
+    if (spiralOpen) closeSpiral();
+    shellOpen = true;
+    positionShellContent();
+    shellPanel.classList.add('active');
+    shellCta.classList.add('active');
+    shellDisclaimer.classList.add('active');
+    shellCornerBtn.classList.add('active');
+    pageEl.classList.add('shell-open');
+  }
+
+  function closeShell() {
+    shellOpen = false;
+    shellPanel.classList.remove('active');
+    shellCta.classList.remove('active');
+    shellDisclaimer.classList.remove('active');
+    shellCornerBtn.classList.remove('active');
+    pageEl.classList.remove('shell-open');
+  }
+
+  shellIllus.addEventListener('click', e => {
+    e.stopPropagation();
+    shellOpen ? closeShell() : openShell();
+  });
+
+  shellCta.addEventListener('click', e => {
+    e.stopPropagation();
+    openOverlay('overlay-memories');
+  });
+
+  shellCornerBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    openOverlay('overlay-memories');
+  });
 
   /* ── Align tagline: left edge flush with ? button, floated below header ── */
   function positionTagline() {

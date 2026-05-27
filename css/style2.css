@@ -55,14 +55,19 @@ html, body {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background-image: url('../Background/Asset 15-100.jpg');
   background-size: cover;
   background-position: center;
   opacity: 0;
   transition: opacity 0.55s ease;
   pointer-events: none;
 }
-.spiral-open .page-bg { opacity: 1; }
+/* Each background layer uses a pseudo or separate bg declaration */
+.page-bg               { background-image: url('../Background/Asset 15-100.jpg'); }
+.spiral-open .page-bg  { opacity: 1; }
+.shell-open  .page-bg  {
+  background-image: url('../Background/Asset_7_BG.png');
+  opacity: 1;
+}
 
 /* ── Header — 1rem (16px) from each corner ── */
 .header {
@@ -644,4 +649,169 @@ html, body {
   .overlay-box {
     padding: 2rem 1.6rem;
   }
+
+  /* ── Shell Cream mobile ── */
+  #shell-panel {
+    left: 1rem !important;
+    top: 44% !important;
+    width: calc(100vw - 2rem);
+    transform: none !important;
+  }
+  #shell-cta {
+    left: 50% !important;
+    right: auto !important;
+    top: 36% !important;
+    transform: translateX(-50%);
+  }
+  #shell-corner-btn {
+    top: 0.75rem !important;
+    right: 0.75rem !important;
+  }
 }
+
+/* ══════════════════════════════════════════════════════
+   SHELL CREAM — Asset 7 click state
+   Accent colour: #00652e (dark forest green)
+══════════════════════════════════════════════════════ */
+
+:root { --green: #00652e; }
+
+/* Clickable shell illustration */
+.illus-shell {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.illus-shell img { transition: filter 0.3s ease, opacity 0.3s ease; }
+.illus-shell:hover img {
+  filter: drop-shadow(0 0 10px rgba(0,101,46,0.4));
+  opacity: 0.85;
+}
+
+/* When shell is open — all other illus fade, shell goes white */
+.shell-open .illus:not(.illus-shell) { opacity: 0; }
+.shell-open .illus-shell img { filter: invert(1) brightness(10); }
+
+/* Colour flips — brand & UI go green-scheme */
+.shell-open .brand-title,
+.shell-open .brand-sub  { color: var(--white); }
+.shell-open .tagline,
+.shell-open .tagline-cursor { color: var(--white); }
+.shell-open .tagline-cursor { background: var(--white); }
+.shell-open .tagline { z-index: 0; }
+
+.shell-open .btn-circle {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.12);
+  color: var(--white);
+}
+.shell-open .btn-circle:hover { background: var(--white); color: var(--black); }
+
+.shell-open .btn-filled  { background: var(--green); }
+.shell-open .btn-filled:hover { background: #004d22; }
+
+.shell-open .btn-outline {
+  border-color: var(--white);
+  color: var(--white);
+  background: transparent;
+}
+.shell-open .btn-outline:hover { background: var(--white); color: var(--black); }
+
+/* Hide the two nav buttons when shell is open — corner button takes their place */
+.shell-open .btn-filled,
+.shell-open .btn-outline { opacity: 0; pointer-events: none; }
+
+/* ── Shell Cream top-right corner button ── */
+#shell-corner-btn {
+  position: absolute;
+  z-index: 15;
+  top: 1rem;
+  right: 1rem;
+  /* sits alongside the existing nav buttons — they shift left via shell-open */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease 0.1s;
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(11px, 1.1vw, 14px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--white);
+  border: 1.5px solid var(--white);
+  padding: 0.5rem 1.2rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+#shell-corner-btn.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+#shell-corner-btn:hover { background: rgba(255,255,255,0.15); }
+
+/* ── Shell Cream text panel ── */
+#shell-panel {
+  position: absolute;
+  z-index: 15;
+  left: 40%;
+  top: 50%;
+  transform: translateY(-40%);
+  width: clamp(180px, 20vw, 280px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+#shell-panel.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-40%) translateX(0);
+}
+
+.shell-title {
+  font-family: 'NaNTresor', serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3.8vw, 52px);
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 0.8rem;
+}
+
+.shell-body {
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(10px, 1vw, 13px);
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.7;
+  margin-bottom: 0.9rem;
+}
+
+.shell-bold {
+  font-family: 'NaNTresor', serif;
+  font-weight: 700;
+  font-size: clamp(12px, 1.15vw, 16px);
+  color: var(--white);
+  text-decoration: underline;
+  text-decoration-color: var(--green);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+/* ── Shell CTA — same wave SVG style, green accent ── */
+#shell-cta {
+  position: absolute;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease 0.12s;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: clamp(200px, 26vw, 360px);
+}
+#shell-cta.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* reuse .cta-wave and .cta-pill-text from spiral — they're shared */
