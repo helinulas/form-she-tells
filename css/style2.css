@@ -782,7 +782,7 @@ html, body {
   color: rgba(255,255,255,0.85);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  line-height: 1.7;
+  line-height: 1.4;           /* tighter — matches spiral body */
   margin-bottom: 0.9rem;
 }
 
@@ -793,11 +793,11 @@ html, body {
   color: var(--white);
   text-decoration: underline;
   text-decoration-color: var(--green);
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 3px; /* thicker */
 }
 
-/* ── Shell CTA — same wave SVG style, green accent ── */
+/* ── Shell CTA — same wave SVG style, green pill ── */
 #shell-cta {
   position: absolute;
   z-index: 15;
@@ -814,4 +814,18 @@ html, body {
   opacity: 1;
   pointer-events: auto;
 }
-/* reuse .cta-wave and .cta-pill-text from spiral — they're shared */
+/* Override pill text to use green background instead of brown */
+#shell-cta .cta-pill-text {
+  background: var(--green);
+}
+#shell-cta:hover .cta-pill-text { background: #004d22; }
+
+/* Disclaimer gets a dark green box */
+#shell-disclaimer {
+  background: rgba(0, 101, 46, 0.82);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: rgba(255,255,255,0.75);
+  backdrop-filter: blur(4px);
+}
+#shell-disclaimer strong { color: rgba(255,255,255,0.95); }
