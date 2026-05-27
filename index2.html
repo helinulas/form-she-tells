@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>She Tells — Sea Shells</title>
-  <link rel="stylesheet" href="css/style2.css?v=27" />
+  <link rel="stylesheet" href="css/style2.css?v=28" />
 </head>
 <body>
 
@@ -366,6 +366,7 @@
     shellDisclaimer.classList.add('active');
     shellCornerBtn.classList.add('active');
     pageEl.classList.add('shell-open');
+    btnDunes.textContent = 'Outlast the acid era...';
   }
 
   function closeShell() {
@@ -375,6 +376,7 @@
     shellDisclaimer.classList.remove('active');
     shellCornerBtn.classList.remove('active');
     pageEl.classList.remove('shell-open');
+    btnDunes.textContent = 'tune in to the stream';
   }
 
   shellIllus.addEventListener('click', e => {
@@ -429,6 +431,7 @@
     o2Disclaimer.classList.add('active');
     o2CornerBtn.classList.add('active');
     pageEl.classList.add('o2-open');
+    btnDunes.textContent = 'You will oooh too...';
   }
 
   function closeO2() {
@@ -438,6 +441,7 @@
     o2Disclaimer.classList.remove('active');
     o2CornerBtn.classList.remove('active');
     pageEl.classList.remove('o2-open');
+    btnDunes.textContent = 'tune in to the stream';
   }
 
   o2Illus.addEventListener('click', e => { e.stopPropagation(); o2Open ? closeO2() : openO2(); });
@@ -479,6 +483,7 @@
     sargassumDisclaimer.classList.add('active');
     sargassumCornerBtn.classList.add('active');
     pageEl.classList.add('sargassum-open');
+    btnDunes.textContent = '@ The Big Sea-ty Life';
   }
 
   function closeSargassum() {
@@ -488,6 +493,7 @@
     sargassumDisclaimer.classList.remove('active');
     sargassumCornerBtn.classList.remove('active');
     pageEl.classList.remove('sargassum-open');
+    btnDunes.textContent = 'tune in to the stream';
   }
 
   sargassumIllus.addEventListener('click', e => { e.stopPropagation(); sargassumOpen ? closeSargassum() : openSargassum(); });
@@ -530,6 +536,7 @@
     acidDisclaimer.classList.add('active');
     acidCornerBtn.classList.add('active');
     pageEl.classList.add('acid-open');
+    btnDunes.textContent = 'DISSOLVE WITH DIGNITY.';
   }
 
   function closeAcid() {
@@ -539,11 +546,22 @@
     acidDisclaimer.classList.remove('active');
     acidCornerBtn.classList.remove('active');
     pageEl.classList.remove('acid-open');
+    btnDunes.textContent = 'tune in to the stream';
   }
 
   acidIllus.addEventListener('click', e => { e.stopPropagation(); acidOpen ? closeAcid() : openAcid(); });
   acidCta.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
   acidCornerBtn.addEventListener('click', e => { e.stopPropagation(); closeAcid(); });
+
+  /* ── btnDunes click: closes whichever section is open ── */
+  btnDunes.addEventListener('click', e => {
+    e.stopPropagation();
+    if (spiralOpen)    closeSpiral();
+    if (shellOpen)     closeShell();
+    if (o2Open)        closeO2();
+    if (sargassumOpen) closeSargassum();
+    if (acidOpen)      closeAcid();
+  });
 
   /* ── Align tagline: left edge flush with ? button, floated below header ── */
   function positionTagline() {

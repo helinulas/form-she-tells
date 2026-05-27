@@ -679,13 +679,19 @@ html, body {
     top: 36% !important;
     transform: translateX(-50%);
   }
-  /* Hide corner buttons on mobile — header layout matches spiral (no corner btn) */
+  /* Hide absolute corner buttons on mobile — btn-outline in nav takes their role */
   #shell-corner-btn,
   #o2-corner-btn,
   #sargassum-corner-btn,
   #acid-corner-btn {
     display: none !important;
   }
+
+  /* Show btn-outline on mobile when a section is open, styled with its colour */
+  .shell-open     .btn-outline { opacity: 1 !important; pointer-events: auto !important; border-color: var(--green)    !important; color: var(--white) !important; }
+  .o2-open        .btn-outline { opacity: 1 !important; pointer-events: auto !important; border-color: var(--yellow)   !important; color: var(--white) !important; }
+  .sargassum-open .btn-outline { opacity: 1 !important; pointer-events: auto !important; border-color: var(--sargassum)!important; color: var(--white) !important; }
+  .acid-open      .btn-outline { opacity: 1 !important; pointer-events: auto !important; border-color: var(--pink)     !important; color: var(--white) !important; }
 }
 
 /* ══════════════════════════════════════════════════════
