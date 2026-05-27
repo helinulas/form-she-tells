@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>She Tells — Sea Shells</title>
-  <link rel="stylesheet" href="css/style2.css?v=20" />
+  <link rel="stylesheet" href="css/style2.css?v=21" />
 </head>
 <body>
 
@@ -45,7 +45,7 @@
       <img src="drawings/Asset 8.svg" alt="illustration 2" />
     </div>
 
-    <div class="illus"
+    <div class="illus illus-acid" id="acid-illus"
          style="--size:12vw; --rot-start:-3deg; --rot-end:1deg;  --delay:0.55s; --duration:2.4s; --y-rest:-16vh;">
       <img src="drawings/Asset 11.svg" alt="illustration 3" />
     </div>
@@ -148,6 +148,26 @@
     <strong>Disclaimer:</strong> At Sargassum City, we do not take responsibility for climate change,
     carbon emissions, or the plastic in your body. If any of these symptoms occur in your area,
     please ask your doctor or pharmacist whether this is right for you.
+  </p>
+
+  <!-- ── Acid Tabs (Asset 11) ── -->
+  <button id="acid-corner-btn">DISSOLVE WITH DIGNITY.</button>
+
+  <div id="acid-panel">
+    <p class="acid-title">acid tabs</p>
+    <p class="acid-body">Keep your ACID UNDER control.<br>Now in Dimethyl SULFIDE Flavour!</p>
+    <p class="acid-bold">The ocean will never leave you now.</p>
+  </div>
+
+  <button id="acid-cta" aria-haspopup="dialog">
+    <img src="drawings/Asset 16.svg" class="cta-wave" alt="" aria-hidden="true" />
+    <span class="cta-pill-text">Send your memories today!</span>
+  </button>
+
+  <p class="page-disclaimer" id="acid-disclaimer">
+    <strong>Disclaimer:</strong> She Tells Acid Tabs are a food supplement and not a substitute
+    for medical advice, ocean governance, or carbonate chemistry. Results may vary depending on
+    your personal pH levels and the current aragonite saturation of your local waters.
   </p>
 
 </div>
@@ -269,6 +289,7 @@
     if (shellOpen)     closeShell();
     if (o2Open)        closeO2();
     if (sargassumOpen) closeSargassum();
+    if (acidOpen)      closeAcid();
     spiralOpen = true;
     positionSpiralContent();
     spiralPanel.classList.add('active');
@@ -304,6 +325,7 @@
     if (shellOpen)     closeShell();
     if (o2Open)        closeO2();
     if (sargassumOpen) closeSargassum();
+    if (acidOpen)      closeAcid();
   });
 
   /* ── Shell Cream (Asset 7) click interaction ── */
@@ -334,6 +356,9 @@
 
   function openShell() {
     if (spiralOpen) closeSpiral();
+    if (o2Open)     closeO2();
+    if (sargassumOpen) closeSargassum();
+    if (acidOpen)   closeAcid();
     shellOpen = true;
     positionShellContent();
     shellPanel.classList.add('active');
@@ -395,6 +420,7 @@
     if (spiralOpen) closeSpiral();
     if (shellOpen)  closeShell();
     if (sargassumOpen) closeSargassum();
+    if (acidOpen)   closeAcid();
     o2Open = true;
     positionO2Content();
     o2Panel.classList.add('active');
@@ -429,10 +455,9 @@
     const rect = sargassumIllus.getBoundingClientRect();
     const cx   = rect.left + rect.width / 2;
     const cy   = rect.top  + rect.height / 2;
-    // Panel: to the LEFT of the illustration
+    // Panel: to the LEFT of the illustration — top comes from CSS, only left is set by JS
     const panelW = sargassumPanel.offsetWidth;
     sargassumPanel.style.left      = Math.max(16, cx - rect.width * 1.6 - panelW * 0.2) + 'px';
-    sargassumPanel.style.top       = (cy - rect.height * 0.3) + 'px';
     sargassumPanel.style.transform = 'none';
     // CTA: above the illustration
     const ctaW = sargassumCta.offsetWidth;
@@ -445,6 +470,7 @@
     if (spiralOpen) closeSpiral();
     if (shellOpen)  closeShell();
     if (o2Open)     closeO2();
+    if (acidOpen)   closeAcid();
     sargassumOpen = true;
     positionSargassumContent();
     sargassumPanel.classList.add('active');
@@ -466,6 +492,57 @@
   sargassumIllus.addEventListener('click', e => { e.stopPropagation(); sargassumOpen ? closeSargassum() : openSargassum(); });
   sargassumCta.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
   sargassumCornerBtn.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
+
+  /* ── Acid Tabs (Asset 11) ── */
+  const acidIllus      = document.getElementById('acid-illus');
+  const acidPanel      = document.getElementById('acid-panel');
+  const acidCta        = document.getElementById('acid-cta');
+  const acidDisclaimer = document.getElementById('acid-disclaimer');
+  const acidCornerBtn  = document.getElementById('acid-corner-btn');
+  let   acidOpen       = false;
+
+  function positionAcidContent() {
+    const rect = acidIllus.getBoundingClientRect();
+    const cx   = rect.left + rect.width / 2;
+    const cy   = rect.top  + rect.height / 2;
+    // Panel: to the LEFT of the illustration
+    const panelW = acidPanel.offsetWidth;
+    acidPanel.style.left      = Math.max(16, cx - rect.width * 1.6 - panelW * 0.2) + 'px';
+    acidPanel.style.top       = (cy - rect.height * 0.3) + 'px';
+    acidPanel.style.transform = 'none';
+    // CTA: above the illustration
+    const ctaW = acidCta.offsetWidth;
+    acidCta.style.left  = (cx - ctaW / 2) + 'px';
+    acidCta.style.top   = (rect.top - 60) + 'px';
+    acidCta.style.right = 'auto';
+  }
+
+  function openAcid() {
+    if (spiralOpen)    closeSpiral();
+    if (shellOpen)     closeShell();
+    if (o2Open)        closeO2();
+    if (sargassumOpen) closeSargassum();
+    acidOpen = true;
+    positionAcidContent();
+    acidPanel.classList.add('active');
+    acidCta.classList.add('active');
+    acidDisclaimer.classList.add('active');
+    acidCornerBtn.classList.add('active');
+    pageEl.classList.add('acid-open');
+  }
+
+  function closeAcid() {
+    acidOpen = false;
+    acidPanel.classList.remove('active');
+    acidCta.classList.remove('active');
+    acidDisclaimer.classList.remove('active');
+    acidCornerBtn.classList.remove('active');
+    pageEl.classList.remove('acid-open');
+  }
+
+  acidIllus.addEventListener('click', e => { e.stopPropagation(); acidOpen ? closeAcid() : openAcid(); });
+  acidCta.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
+  acidCornerBtn.addEventListener('click', e => { e.stopPropagation(); openOverlay('overlay-memories'); });
 
   /* ── Align tagline: left edge flush with ? button, floated below header ── */
   function positionTagline() {

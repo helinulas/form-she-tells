@@ -73,7 +73,7 @@ html, body {
   position: relative;
   z-index: 12;   /* above ::before bg layer (z-index:1) */
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 1rem 1rem 0;
   flex-shrink: 0;
@@ -964,9 +964,7 @@ html, body {
 .sargassum-open .btn-filled:hover { background: #4aaa18; }
 .sargassum-open .btn-outline    { opacity: 0; pointer-events: none; }
 
-/* Sargassum CTA pill */
-#sargassum-cta .cta-pill-text { background: var(--sargassum); }
-#sargassum-cta:hover .cta-pill-text { background: #4aaa18; }
+/* Sargassum CTA — no fill, wave SVG shape speaks for itself */
 
 /* Corner button — filled sargassum green */
 #sargassum-corner-btn {
@@ -1018,11 +1016,11 @@ html, body {
   text-underline-offset: 4px; text-decoration-thickness: 3px;
 }
 
-/* Sargassum disclaimer box */
+/* Sargassum disclaimer — far left, no background */
 #sargassum-disclaimer {
-  background: rgba(40, 90, 10, 0.82);
-  padding: 0.75rem 1rem; border-radius: 0.5rem;
-  backdrop-filter: blur(4px);
+  background: transparent;
+  left: 1.6rem;
+  right: auto;
   color: rgba(255,255,255,0.75);
 }
 #sargassum-disclaimer strong { color: rgba(255,255,255,0.95); }
@@ -1050,4 +1048,116 @@ html, body {
   #o2-corner-btn, #sargassum-corner-btn {
     top: 0.75rem !important; right: 0.75rem !important;
   }
+}
+
+/* ══════════════════════════════════════════════════════
+   ACID TABS — Asset 11  |  #d0429c pink/magenta
+══════════════════════════════════════════════════════ */
+:root { --pink: #d0429c; }
+
+.illus-acid { pointer-events: auto; cursor: pointer; }
+.illus-acid img { transition: filter 0.3s ease, opacity 0.3s ease; }
+.illus-acid:hover img { filter: drop-shadow(0 0 10px rgba(208,66,156,0.4)); opacity: 0.85; }
+
+.acid-open .illus:not(.illus-acid) { opacity: 0; }
+.acid-open .illus-acid img { filter: invert(1) brightness(10); }
+
+/* Background */
+.acid-open .page-bg { background-image: url('../Background/Asset_11_BG.png'); opacity: 1; }
+
+/* UI colour flips */
+.acid-open .brand-title,
+.acid-open .brand-sub      { color: var(--white); }
+.acid-open .tagline        { color: var(--white); z-index: 0; }
+.acid-open .tagline-cursor { background: var(--white); }
+.acid-open .btn-circle     { border-color: var(--white); background: rgba(255,255,255,0.12); color: var(--white); }
+.acid-open .btn-circle:hover { background: var(--white); color: var(--black); }
+.acid-open .btn-filled     { background: var(--pink); color: var(--white); }
+.acid-open .btn-filled:hover { background: #a8327e; }
+.acid-open .btn-outline    { opacity: 0; pointer-events: none; }
+
+/* Acid CTA — pink filled pill */
+#acid-cta .cta-pill-text { background: var(--pink); }
+#acid-cta:hover .cta-pill-text { background: #a8327e; }
+
+/* Corner button — pink filled */
+#acid-corner-btn {
+  position: absolute; z-index: 15; top: 1rem; right: 1rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease 0.1s;
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(11px, 1.1vw, 14px);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--pink); color: var(--white);
+  border: none; padding: 0.55rem 1.4rem; border-radius: 2rem;
+  cursor: pointer; white-space: nowrap;
+}
+#acid-corner-btn.active { opacity: 1; pointer-events: auto; }
+#acid-corner-btn:hover  { background: #a8327e; }
+
+/* Panel */
+#acid-panel {
+  position: absolute; z-index: 15;
+  left: 24%; top: 50%; transform: translateY(-40%);
+  width: clamp(180px, 22vw, 300px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+#acid-panel.active { opacity: 1; pointer-events: auto; transform: translateY(-40%) translateX(0); }
+
+.acid-title {
+  font-family: 'NaNTresor', serif; font-weight: 400;
+  font-size: clamp(22px, 2.8vw, 38px);
+  color: var(--white);
+  letter-spacing: -0.01em; line-height: 1;
+  margin-bottom: 0.8rem; white-space: nowrap;
+}
+
+.acid-body {
+  font-family: 'CeleScript', cursive;
+  font-size: clamp(10px, 1vw, 13px);
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  line-height: 1.4; margin-bottom: 0.9rem;
+}
+
+.acid-bold {
+  font-family: 'NaNTresor', serif; font-weight: 700;
+  font-size: clamp(12px, 1.15vw, 16px);
+  color: var(--white);
+  text-decoration: underline;
+  text-decoration-color: var(--pink);
+  text-underline-offset: 4px; text-decoration-thickness: 3px;
+}
+
+/* Acid disclaimer — far left, no background */
+#acid-disclaimer {
+  background: transparent;
+  left: 1.6rem;
+  right: auto;
+  color: rgba(255,255,255,0.75);
+}
+#acid-disclaimer strong { color: rgba(255,255,255,0.95); }
+
+/* Acid CTA button */
+#acid-cta {
+  position: absolute; z-index: 15;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease 0.12s;
+  background: transparent; border: none; padding: 0; cursor: pointer;
+  width: clamp(200px, 26vw, 360px);
+}
+#acid-cta.active { opacity: 1; pointer-events: auto; }
+
+/* Mobile overrides */
+@media (max-width: 768px) {
+  #acid-panel {
+    left: 1rem !important; top: 44% !important;
+    width: calc(100vw - 2rem); transform: none !important;
+  }
+  #acid-cta {
+    left: 50% !important; right: auto !important;
+    top: 36% !important; transform: translateX(-50%);
+  }
+  #acid-corner-btn { top: 0.75rem !important; right: 0.75rem !important; }
 }
